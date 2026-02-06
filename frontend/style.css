@@ -600,73 +600,82 @@ button,
         font-size: 1.5rem;
     }
 
-    /* --- CHAT MÓVIL (Vertical Compacto) --- */
+    /* --- CHAT MÓVIL (Horizontal Scroll / Stories Style) --- */
     .chat-container {
         flex-direction: column;
-        /* Vertical: Lista arriba, Chat abajo */
-        height: calc(100dvh - 80px);
-        /* Toda la altura */
+        height: calc(100dvh - 120px);
         position: relative;
     }
 
     .sidebar {
         width: 100%;
-        height: 130px;
-        /* PEQUEÑO: Solo 130px para la lista */
+        height: 90px;
+        /* Muy compacto, solo una fila */
         flex-shrink: 0;
         border-right: none;
-        border-bottom: 2px solid var(--border);
+        border-bottom: 1px solid var(--border);
         display: flex;
         flex-direction: column;
-        background: #fff;
+        background: #f9fafb;
     }
 
     .sidebar-header {
         display: none;
-        /* Ocultamos título para ahorrar espacio */
+        /* Ocultar título para ganar espacio */
     }
 
     .thread-list {
         display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        padding: 0;
+        /* Horizontal */
+        flex-direction: row;
+        overflow-x: auto;
+        /* Scroll lateral */
+        padding: 5px;
+        gap: 10px;
+        align-items: center;
+        scrollbar-width: none;
+        /* Ocultar barra scroll Firefox */
+    }
+
+    .thread-list::-webkit-scrollbar {
+        display: none;
+        /* Ocultar barra scroll Chrome/Safari */
     }
 
     .thread-item {
-        width: 100%;
-        padding: 0.8rem;
-        border-bottom: 1px solid #f3f4f6;
-        gap: 0.8rem;
+        min-width: 200px;
+        /* Tarjetas anchas pero compactas */
+        max-width: 200px;
+        height: 70px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: normal;
+        /* Permitir texto en dos líneas si cabe */
     }
 
     .thread-info p {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        display: none;
+        /* Ocultar preview en modo stories */
     }
 
-    /* CHAT WINDOW: Ocupa todo el espacio restante */
     .chat-window {
-        width: 100%;
         flex: 1;
-        /* El resto de la altura */
-        display: flex;
         flex-direction: column;
-        min-height: 0;
-        position: static;
-        /* Ya no es absoluta */
+        display: flex;
     }
 
-    /* Botón atrás oculto, ya que se ven los dos */
     .back-button {
         display: none !important;
     }
 
     .chat-input-area {
         padding-bottom: 20px;
-        /* Espacio para no tocar bordes */
     }
 }
 

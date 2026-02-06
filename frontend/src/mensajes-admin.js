@@ -60,8 +60,6 @@ async function loadThreads() {
 
     } catch (error) {
         console.error('Error cargando hilos:', error);
-    } catch (error) {
-        console.error('Error cargando hilos:', error);
         threadList.innerHTML = `<p style="color:red; padding:1rem">Error: ${error.message}</p>`;
     }
 }

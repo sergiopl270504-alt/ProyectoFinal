@@ -63,7 +63,6 @@ async function loadThreads() {
         `}).join('');
 
     } catch (error) {
-    } catch (error) {
         threadList.innerHTML = `<p style="color:red; padding:1rem">Error: ${error.message}</p>`;
     }
 }
