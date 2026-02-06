@@ -99,6 +99,21 @@ const crearPropiedad = async (req, res) => {
     try {
         const { titulo, descripcion, habitaciones, estacionamiento, wc, calle, lat, lng, precio, categoryId, imagen } = req.body;
 
+        // Lógica de Imagen: Si viene imagen con w=500 (optimizada) o normal, usarla.
+        // Si no viene imagen, poner una por defecto aleatoria.
+        let urlImagen = imagen;
+        if (!urlImagen) {
+            const backups = [
+                'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80',
+                'https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?auto=format&fit=crop&w=800&q=80'
+            ];
+            urlImagen = backups[Math.floor(Math.random() * backups.length)];
+        } else if (urlImagen && urlImagen.includes('w=500')) {
+            // Fix para imágenes cacheadas pequeñas
+            urlImagen = 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80';
+        }
+
         const propiedad = await Propiedad.create({
             titulo,
             descripcion,
@@ -109,7 +124,7 @@ const crearPropiedad = async (req, res) => {
             lat,
             lng,
             precio,
-            imagen: (imagen && imagen.includes('w=500')) ? 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80' : imagen,
+            imagen: urlImagen,
             categoryId,
             userId: req.usuario.id,
             publicado: true
