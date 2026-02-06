@@ -629,6 +629,11 @@ button,
         flex-direction: column;
     }
 
+    /* MODO ENFOQUE: Cuando escribe, ocultar sidebar para dar sitio al teclado */
+    .chat-container.input-focused .sidebar {
+        display: none;
+    }
+
     /* Ocultar elementos de la lógica "WhatsApp" anterior */
     .back-button {
         display: none !important;

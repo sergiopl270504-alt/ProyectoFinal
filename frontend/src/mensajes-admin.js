@@ -120,6 +120,16 @@ messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
 });
 
+// UX Móvil: Ocultar lista al escribir
+messageInput.addEventListener('focus', () => {
+    document.querySelector('.chat-container').classList.add('input-focused');
+});
+messageInput.addEventListener('blur', () => {
+    setTimeout(() => {
+        document.querySelector('.chat-container').classList.remove('input-focused');
+    }, 200);
+});
+
 // Enviar respuesta
 /**
  * Envía una respuesta administrativa.
