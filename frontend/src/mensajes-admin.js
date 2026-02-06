@@ -18,6 +18,12 @@ const sendBtn = document.getElementById('send-btn');
 
 let currentInquiryId = null;
 
+// Event Listeners
+sendBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
 // Cargar lista de hilos
 /**
  * Carga la lista global de todas las conversaciones para el administrador.

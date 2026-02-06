@@ -32,6 +32,14 @@ const sendBtn = document.getElementById('send-btn');
 
 let currentInquiryId = null;
 
+// Event Listeners
+if (sendBtn) {
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+}
+
 // Cargar lista de conversaciones (hilos)
 /**
  * Carga la lista de hilos de conversación del usuario.
