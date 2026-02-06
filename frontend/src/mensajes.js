@@ -144,3 +144,42 @@ setInterval(() => {
     if (currentInquiryId) loadMessages(currentInquiryId);
     loadThreads();
 }, 10000);
+
+// Cargar mensajes de un hilo
+async function loadMessages(id) {
+    try {
+        chatMessages.innerHTML = '<div style="text-align:center; padding:1rem">Cargando...</div>';
+
+        const data = await request(`/mensajes/${id}`);
+
+        if (chatTitle) chatTitle.textContent = data.propiedad ? data.propiedad.titulo : 'Chat de Propiedad';
+
+        const messages = data.mensajes || [];
+
+        if (messages.length === 0) {
+            chatMessages.innerHTML = '<div style="text-align:center; padding:1rem; color:#888">Inicia la conversación...</div>';
+            return;
+        }
+
+        const myRole = 'usuario';
+
+        chatMessages.innerHTML = messages.map(msg => {
+            const isMine = msg.remitente === myRole;
+            const bubbleClass = isMine ? 'mine' : 'theirs';
+            const date = new Date(msg.fecha_envio).toLocaleString();
+
+            return `
+                <div class="message-bubble ${bubbleClass}">
+                    <div>${msg.contenido}</div>
+                    <span class="message-time">${date}</span>
+                </div>
+            `;
+        }).join('');
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    } catch (error) {
+        console.error(error);
+        chatMessages.innerHTML = `<div style="color:red; text-align:center">Error: ${error.message}</div>`;
+    }
+}

@@ -136,3 +136,48 @@ setInterval(() => {
     if (currentInquiryId) loadMessages(currentInquiryId);
     loadThreads();
 }, 10000);
+
+// Cargar mensajes de un hilo
+async function loadMessages(id) {
+    try {
+        console.log('Cargando mensajes para ID:', id);
+        chatMessages.innerHTML = '<div style="text-align:center; padding:1rem">Cargando...</div>';
+
+        const data = await request(`/mensajes/${id}`);
+        console.log('Detalle cargado:', data);
+
+        // Actualizar cabecera
+        if (chatTitle) chatTitle.textContent = data.propiedad ? data.propiedad.titulo : 'Propiedad eliminada';
+        if (chatSubtitle) chatSubtitle.textContent = data.usuario ? data.usuario.nombre_completo : 'Usuario';
+
+        const messages = data.mensajes || [];
+
+        if (messages.length === 0) {
+            chatMessages.innerHTML = '<div style="text-align:center; padding:1rem; color:#888">No hay mensajes aún.</div>';
+            return;
+        }
+
+        // En panel admin, "mío" es el que tiene remitente === 'admin'
+        const myRole = 'admin';
+
+        chatMessages.innerHTML = messages.map(msg => {
+            const isMine = msg.remitente === myRole;
+            const bubbleClass = isMine ? 'mine' : 'theirs';
+            const date = new Date(msg.fecha_envio).toLocaleString();
+
+            return `
+                <div class="message-bubble ${bubbleClass}">
+                    <div>${msg.contenido}</div>
+                    <span class="message-time">${date}</span>
+                </div>
+            `;
+        }).join('');
+
+        // Scroll al final
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    } catch (error) {
+        console.error('Error cargando mensajes:', error);
+        chatMessages.innerHTML = `<div style="color:red; text-align:center">Error: ${error.message}</div>`;
+    }
+}
