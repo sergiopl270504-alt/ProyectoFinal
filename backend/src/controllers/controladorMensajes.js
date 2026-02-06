@@ -172,6 +172,8 @@ const responderMensaje = async (req, res) => {
         res.status(500).json({ msg: 'Error al responder mensaje' });
     }
 }
+
+// Eliminar una consulta (conversación)
 /**
  * Elimina una consulta y todos sus mensajes asociados.
  * 
