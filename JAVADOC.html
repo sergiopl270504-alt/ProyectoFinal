@@ -4,192 +4,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Javadoc - Casafinder API</title>
+    <title>Javadoc Completo - Casafinder API</title>
     <style>
         :root {
             --primary: #2563eb;
-            --sidebar-bg: #f8fafc;
-            --sidebar-width: 280px;
-            --text-main: #1e293b;
+            --primary-dark: #1e40af;
+            --bg-body: #f8fafc;
+            --sidebar-width: 300px;
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
+            --code-bg: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             margin: 0;
             display: flex;
             height: 100vh;
             color: var(--text-main);
+            background: var(--bg-body);
         }
 
         /* Sidebar Navigation */
         .sidebar {
             width: var(--sidebar-width);
-            background: var(--sidebar-bg);
+            background: white;
             border-right: 1px solid var(--border);
-            padding: 2rem 1rem;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             flex-shrink: 0;
         }
 
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            background: #ffffff;
+        }
+
         .brand {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.25rem;
+            font-weight: 800;
             color: var(--primary);
-            margin-bottom: 2rem;
-            display: block;
             text-decoration: none;
+            display: block;
         }
 
-        .nav-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .nav-header {
+        .version {
             font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        .nav-scroll {
+            overflow-y: auto;
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .nav-group {
+            margin-bottom: 2rem;
+        }
+
+        .nav-group-title {
+            font-size: 0.7rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
             color: var(--text-muted);
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 0.5rem;
             padding-left: 0.5rem;
         }
 
-        .nav-link {
+        .nav-item {
             display: block;
-            padding: 0.5rem;
+            padding: 0.4rem 0.5rem;
             color: var(--text-main);
             text-decoration: none;
+            font-size: 0.9rem;
             border-radius: 4px;
-            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
             transition: all 0.2s;
         }
 
-        .nav-link:hover {
-            background: #e0e7ff;
+        .nav-item:hover {
+            background: #eff6ff;
             color: var(--primary);
+        }
+
+        .nav-item.active {
+            background: #eff6ff;
+            color: var(--primary);
+            font-weight: 600;
         }
 
         /* Main Content */
-        .main-content {
+        .main {
             flex: 1;
-            padding: 3rem 4rem;
+            padding: 0;
             overflow-y: auto;
             scroll-behavior: smooth;
+            position: relative;
+        }
+
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem;
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4 {
+            margin: 0;
+            color: var(--text-main);
         }
 
         h1 {
-            font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: #0f172a;
+            font-size: 2.5rem;
+            letter-spacing: -0.025em;
         }
 
         h2 {
-            font-size: 1.8rem;
-            margin-top: 3rem;
+            margin-top: 4rem;
             margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 0.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 1.75rem;
         }
 
         h3 {
-            font-size: 1.4rem;
-            margin-top: 2.5rem;
-            color: #334155;
-        }
-
-        h4 {
-            font-size: 1.1rem;
-            margin-top: 2rem;
-            color: var(--primary);
-            font-family: 'Consolas', monospace;
-            display: flex;
-            align-items: center;
-        }
-
-        h4::before {
-            content: 'ƒ';
-            margin-right: 0.5rem;
-            color: #94a3b8;
-            font-weight: normal;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
         }
 
         p {
             line-height: 1.7;
-            color: #475569;
-            max-width: 800px;
+            color: #334155;
+            margin-bottom: 1rem;
         }
 
-        code {
-            background: #f1f5f9;
-            padding: 0.2em 0.4em;
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9em;
-            color: #ec4899;
-        }
-
-        ul {
-            margin-left: 1.5rem;
-            line-height: 1.7;
-            color: #475569;
-        }
-
-        li {
-            margin-bottom: 0.5rem;
-        }
-
-        .method-card {
+        /* API Cards */
+        .api-card {
             background: white;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 1.5rem;
+            padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 999px;
+        .method-signature {
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .badge {
             font-size: 0.75rem;
-            font-weight: 600;
-            margin-right: 0.5rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-right: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
         }
 
-        .tag.post {
+        .badge.post {
             background: #dcfce7;
             color: #166534;
         }
 
-        .tag.get {
+        .badge.get {
             background: #dbeafe;
             color: #1e40af;
         }
 
-        .tag.auth {
+        .badge.put {
             background: #fef9c3;
             color: #854d0e;
         }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
+        .badge.delete {
+            background: #fee2e2;
+            color: #991b1b;
+        }
 
-            .sidebar {
-                width: 100%;
-                height: auto;
-                padding: 1rem;
-                border-right: none;
-                border-bottom: 1px solid var(--border);
-            }
+        .badge.middleware {
+            background: #f3e8ff;
+            color: #6b21a8;
+        }
 
-            .main-content {
-                padding: 1rem;
-            }
+        .badge.model {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-muted);
+            background: #f8fafc;
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85em;
+            color: #d63384;
+        }
+
+        .anchor {
+            scroll-margin-top: 2rem;
         }
     </style>
 </head>
@@ -197,119 +250,318 @@
 <body>
 
     <nav class="sidebar">
-        <a href="#" class="brand">Casafinder API</a>
-
-        <div class="nav-section">
-            <div class="nav-header">Backend</div>
-            <a href="#controladorAuth" class="nav-link">Autenticación</a>
-            <a href="#controladorPropiedades" class="nav-link">Propiedades</a>
-            <a href="#controladorMensajes" class="nav-link">Mensajes</a>
+        <div class="sidebar-header">
+            <a href="#" class="brand">Casafinder API</a>
+            <span class="version">v2.2.0 (Producción)</span>
         </div>
 
-        <div class="nav-section">
-            <div class="nav-header">Frontend</div>
-            <a href="#frontend-mensajes" class="nav-link">Scripts de Mensajería</a>
+        <div class="nav-scroll">
+            <div class="nav-group">
+                <div class="nav-group-title">Modelos de Datos</div>
+                <a href="#Usuario" class="nav-item">Usuario</a>
+                <a href="#Propiedad" class="nav-item">Propiedad</a>
+                <a href="#Mensaje" class="nav-item">Mensaje</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">Autenticación</div>
+                <a href="#auth-registrar" class="nav-item">Registrar Usuario</a>
+                <a href="#auth-login" class="nav-item">Login / Login 2FA</a>
+                <a href="#auth-setup2fa" class="nav-item">Configurar 2FA</a>
+                <a href="#auth-verify2fa" class="nav-item">Verificar 2FA</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">Propiedades</div>
+                <a href="#prop-crear" class="nav-item">Crear Propiedad</a>
+                <a href="#prop-listar" class="nav-item">Listar / Buscar</a>
+                <a href="#prop-pdf" class="nav-item">Descargar PDF</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">Mensajería</div>
+                <a href="#msg-crear" class="nav-item">Crear Consulta</a>
+                <a href="#msg-responder" class="nav-item">Responder</a>
+            </div>
+
+            <div class="nav-group">
+                <div class="nav-group-title">Herramientas</div>
+                <a href="#helper-email" class="nav-item">Email Helpers</a>
+                <a href="#middleware" class="nav-item">Middleware</a>
+            </div>
         </div>
     </nav>
 
-    <main class="main-content">
-        <h1>Referencia Técnica (Javadoc)</h1>
-        <p>Documentación técnica de controladores y funciones del sistema Casafinder.</p>
-        <p><strong>Versión:</strong> 1.0 &nbsp;|&nbsp; <strong>Fecha:</strong> Febrero 2026</p>
+    <main class="main">
+        <div class="content-container">
+            <h1>Documentación Técnica Completa</h1>
+            <p>Referencia exhaustiva del código fuente de Casafinder. Incluye definición de modelos, rutas de API REST,
+                controladores y lógica de frontend.</p>
 
-        <section id="controladorAuth">
-            <h2>1. Controlador de Autenticación</h2>
-            <p>Ubicación: <code>backend/src/controllers/controladorAuth.js</code></p>
+            <!-- SECCIÓN MODELOS -->
+            <section id="modelos" class="anchor">
+                <h2>1. Modelos de Datos (Sequelize)</h2>
+                <p>Ubicación: <code>backend/src/models/</code></p>
 
-            <div class="method-card">
-                <h4>registrar(req, res)</h4>
-                <p>Registra un nuevo usuario en el sistema con validación y hashing de contraseña.</p>
-                <ul>
-                    <li><strong>Parámetros:</strong>
-                        <ul>
-                            <li><code>req.body.nombre_completo</code>: Nombre real del usuario.</li>
-                            <li><code>req.body.correo_electronico</code>: Email único en el sistema.</li>
-                            <li><code>req.body.contrasena</code>: Contraseña segura.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Retorno:</strong> JSON indicando éxito o errores de validación.</li>
-                </ul>
-            </div>
+                <div id="Usuario" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge model">MODEL</span> Usuario
+                    </div>
+                    <p>Representa a un actor del sistema (Administrador o Cliente).</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Campo</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>nombre_completo</code></td>
+                                <td>STRING</td>
+                                <td>Nombre real del usuario.</td>
+                            </tr>
+                            <tr>
+                                <td><code>correo_electronico</code></td>
+                                <td>STRING</td>
+                                <td>Único. Usado para login (user).</td>
+                            </tr>
+                            <tr>
+                                <td><code>contrasena</code></td>
+                                <td>STRING</td>
+                                <td><strong>Hash BCrypt</strong>. Nunca texto plano.</td>
+                            </tr>
+                            <tr>
+                                <td><code>tfa_enabled</code></td>
+                                <td>BOOLEAN</td>
+                                <td>Si tiene 2FA activo (true/false).</td>
+                            </tr>
+                            <tr>
+                                <td><code>secret_2fa</code></td>
+                                <td>STRING</td>
+                                <td>Clave secreta Base32 para TOTP.</td>
+                            </tr>
+                            <tr>
+                                <td><code>token_confirmacion</code></td>
+                                <td>STRING</td>
+                                <td>UUID temporal para verificar email.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-            <div class="method-card">
-                <h4>login(req, res)</h4>
-                <p>Gestiona el inicio de sesión. Soporta flujo estándar y 2FA.</p>
-                <ul>
-                    <li><strong>Lógica:</strong> Si el usuario tiene <code>tfa_enabled</code>, no devuelve token, sino
-                        un indicador <code>require2fa</code>.</li>
-                    <li><strong>Retorno Exitoso:</strong> <code>{ token: JWT, usuario: Object }</code></li>
-                </ul>
-            </div>
+                <div id="Propiedad" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge model">MODEL</span> Propiedad
+                    </div>
+                    <p>Inmueble publicado en la plataforma.</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Campo</th>
+                                <th>Tipo</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>titulo</code></td>
+                                <td>STRING(150)</td>
+                                <td>Título comercial del anuncio.</td>
+                            </tr>
+                            <tr>
+                                <td><code>descripcion</code></td>
+                                <td>TEXT</td>
+                                <td>Descripción detallada.</td>
+                            </tr>
+                            <tr>
+                                <td><code>precio</code></td>
+                                <td>DECIMAL</td>
+                                <td>Precio de venta en Euros.</td>
+                            </tr>
+                            <tr>
+                                <td><code>imagen</code></td>
+                                <td>STRING</td>
+                                <td>URL de la imagen principal.</td>
+                            </tr>
+                            <tr>
+                                <td><code>publicado</code></td>
+                                <td>BOOLEAN</td>
+                                <td>Visibilidad pública.</td>
+                            </tr>
+                            <tr>
+                                <td><code>userId</code></td>
+                                <td>INTEGER</td>
+                                <td>FK -> Propietario (Usuario).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-            <div class="method-card">
-                <h4>setup2FA(req, res)</h4>
-                <p>Inicia el proceso de configuración de Doble Factor.</p>
-                <ul>
-                    <li><strong>Lógica:</strong> Genera un secreto TOTP único y devuelve una URL para código QR.</li>
-                    <li><strong>Detalle:</strong> El emisor del QR se establece como "Casafinder (email)" para fácil
-                        identificación.</li>
-                </ul>
-            </div>
-        </section>
+            <!-- SECCIÓN AUTH -->
+            <section id="auth" class="anchor">
+                <h2>2. Controlador de Autenticación</h2>
+                <p>Archivo: <code>backend/src/controllers/controladorAuth.js</code></p>
 
-        <section id="controladorPropiedades">
-            <h2>2. Controlador de Propiedades</h2>
-            <p>Ubicación: <code>backend/src/controllers/controladorPropiedades.js</code></p>
+                <div id="auth-registrar" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge post">POST</span> registrar(req, res)
+                    </div>
+                    <p>Orquesta el registro de nuevos usuarios.</p>
+                    <p><strong>Uso:</strong> <code>/auth/registro</code></p>
+                    <p><strong>Lógica Interna:</strong></p>
+                    <ol>
+                        <li>Valida `express-validator` para campos vacíos.</li>
+                        <li>Verifica si <code>correo_electronico</code> ya existe.</li>
+                        <li>Crea el usuario con el hook <code>beforeCreate</code> que hashea la contraseña.</li>
+                        <li>(Simulado) Envía email de bienvenida.</li>
+                    </ol>
+                </div>
 
-            <div class="method-card">
-                <h4>obtenerPropiedades(req, res)</h4>
-                <p>Recupera el listado público de inmuebles. Soporta filtrado.</p>
-            </div>
+                <div id="auth-login" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge post">POST</span> login(req, res)
+                    </div>
+                    <p>Inicio de sesión seguro con soporte para flujo 2FA.</p>
+                    <p><strong>Retorno (Estándar):</strong></p>
+                    <pre><code>{
+  "token": "eyJhbGciOiJIUz...", 
+  "usuario": { "id": 1, "nombre": "Juan" }
+}</code></pre>
+                    <p><strong>Retorno (Si tiene 2FA):</strong></p>
+                    <pre><code>{
+  "require2fa": true,
+  "userId": 1,
+  "msg": "Introduce código"
+}</code></pre>
+                </div>
 
-            <div class="method-card">
-                <h4>crearPropiedad(req, res)</h4>
-                <p>Da de alta una nueva propiedad vinculada al usuario autenticado.</p>
-                <ul>
-                    <li><strong>Lógica:</strong> Si no se proporciona imagen, el sistema asigna una de stock aleatoria
-                        de Unsplash.</li>
-                </ul>
-            </div>
+                <div id="auth-setup2fa" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">GET</span> setup2FA(req, res)
+                    </div>
+                    <p>Genera configuración inicial para Google Authenticator.</p>
+                    <ul>
+                        <li>Genera secreto aleatorio Base32 (lib: <code>speakeasy</code>).</li>
+                        <li>Genera QR Code DataURL (lib: <code>qrcode</code>).</li>
+                        <li>El QR incluye el "Issuer" como <code>Casafinder (email)</code>.</li>
+                    </ul>
+                </div>
 
-            <div class="method-card">
-                <h4>descargarPDF(req, res)</h4>
-                <p>Genera y transmite un folleto PDF de la propiedad al vuelo.</p>
-                <ul>
-                    <li><strong>Salida:</strong> Stream binario <code>application/pdf</code>.</li>
-                </ul>
-            </div>
-        </section>
+                <div id="auth-verify2fa" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge post">POST</span> verify2FA(req, res)
+                    </div>
+                    <p>Valida el código temporal de 6 dígitos.</p>
+                    <p><strong>Params:</strong> <code>{ userId, token }</code></p>
+                    <p><strong>Lógica:</strong> Usa <code>speakeasy.totp.verify()</code> con ventana de tiempo de 1 (30s
+                        margen).</p>
+                </div>
+            </section>
 
-        <section id="controladorMensajes">
-            <h2>3. Controlador de Mensajes</h2>
-            <p>Ubicación: <code>backend/src/controllers/controladorMensajes.js</code></p>
+            <!-- SECCIÓN PROPIEDADES -->
+            <section id="propiedades" class="anchor">
+                <h2>3. Controlador de Propiedades</h2>
+                <p>Archivo: <code>backend/src/controllers/controladorPropiedades.js</code></p>
 
-            <div class="method-card">
-                <h4>crearConsulta(req, res)</h4>
-                <p>Inicia un hilo de chat. Impide que un propietario se escriba a sí mismo.</p>
-            </div>
-        </section>
+                <div id="prop-crear" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge post">POST</span> crearPropiedad(req, res)
+                    </div>
+                    <p>Alta de inmuebles con asignación automática de usuario y placeholder de imagen.</p>
+                    <ul>
+                        <li><strong>Fallback de Imagen:</strong> Si el frontend no envía <code>imagen</code>, el
+                            controlador selecciona aleatoriamente una URL de Unsplash predefinida.</li>
+                        <li><strong>Validación:</strong> Requiere campos como precio, habitaciones > 0.</li>
+                    </ul>
+                </div>
 
-        <section id="frontend-mensajes">
-            <h2>4. Scripts Frontend</h2>
-            <p>Ubicación: <code>frontend/src/mensajes.js</code></p>
+                <div id="prop-listar" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">GET</span> obtenerPropiedades(req, res)
+                    </div>
+                    <p>Motor de búsqueda pública.</p>
+                    <ul>
+                        <li><strong>Filtro `search`:</strong> Aplica <code>Op.like</code> en Título Y Descripción.</li>
+                        <li><strong>Include:</strong> Carga ansiosamente (Eager Loading) la Categoría y el Usuario
+                            propietario.</li>
+                    </ul>
+                </div>
 
-            <div class="method-card">
-                <h4>loadMessages(id, backgroundUpdate)</h4>
-                <p>Renderiza el chat activo.</p>
-                <ul>
-                    <li><strong>Param: backgroundUpdate</strong> (Bool) - Si es true, silencia el indicador
-                        "Cargando..." para permitir actualizaciones en segundo plano sin parpadeos.</li>
-                </ul>
-            </div>
-        </section>
+                <div id="prop-pdf" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">GET</span> descargarPDF(req, res)
+                    </div>
+                    <p>Generación de documentos dinámicos.</p>
+                    <ul>
+                        <li><strong>Librería:</strong> <code>PDFKit</code>.</li>
+                        <li><strong>Output:</strong> Stream Buffer directo al navegador.</li>
+                    </ul>
+                </div>
+            </section>
 
+            <!-- SECCIÓN UTILS -->
+            <section id="utils" class="anchor">
+                <h2>4. Utilidades y Middleware</h2>
+
+                <div id="middleware" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge middleware">MW</span> checkAuth
+                    </div>
+                    <p>Protege rutas privadas.</p>
+                    <ol>
+                        <li>Busca header <code>Authorization: Bearer TOKEN</code>.</li>
+                        <li>Decodifica JWT con <code>process.env.JWT_SECRET</code>.</li>
+                        <li>Busca el usuario en DB.</li>
+                        <li>Si OK, inyecta <code>req.usuario</code> y llama a <code>next()</code>.</li>
+                    </ol>
+                </div>
+
+                <div id="helper-email" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge middleware">HELPER</span> emails.js
+                    </div>
+                    <p>Gestión de comunicaciones SMTP (Mailtrap/Gmail).</p>
+                    <ul>
+                        <li><code>emailRegistro</code>: Envía token de verificación.</li>
+                        <li><code>emailOlvidePassword</code>: Envía enlace de reset.</li>
+                        <li><strong>Modo DEV:</strong> Si no hay credenciales SMTP, imprime el link en consola.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- SECCIÓN FRONTEND -->
+            <section id="frontend" class="anchor">
+                <h2>5. Scripts de Frontend</h2>
+                <p>Ubicación: <code>frontend/src/</code></p>
+
+                <div class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">JS</span> api.js
+                    </div>
+                    <p>Wrapper centralizado para <code>fetch</code>.</p>
+                    <p>Inyecta automáticamente el Token JWT almacenado en <code>localStorage</code> en cada petición.
+                    </p>
+                </div>
+
+                <div class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">JS</span> mensajes.js / mensajes-admin.js
+                    </div>
+                    <p>Lógica de chat en tiempo real simulado.</p>
+                    <ul>
+                        <li><strong>Polling:</strong> <code>setInterval</code> cada 10s. Llama a
+                            <code>loadMessages(id, true)</code>.</li>
+                        <li><strong>UX:</strong> La flag <code>true</code> evita refrescar el DOM con "Cargando...",
+                            eliminando parpadeos.</li>
+                    </ul>
+                </div>
+            </section>
+
+        </div>
     </main>
-
 </body>
 
 </html>
