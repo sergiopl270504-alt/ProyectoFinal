@@ -600,7 +600,7 @@ button,
         font-size: 1.5rem;
     }
 
-    /* --- CHAT MÓVIL (Vertically Stacked) --- */
+    /* --- CHAT MÓVIL (Horizontal Scroll / Stories Style) --- */
     .chat-container {
         flex-direction: column;
         height: calc(100dvh - 120px);
@@ -609,41 +609,100 @@ button,
 
     .sidebar {
         width: 100%;
-        height: 160px;
-        /* Reducido de 220px */
-        /* MÁS GRANDE para que se vea bien la lista */
+        height: 90px;
+        /* Muy compacto, solo una fila */
         flex-shrink: 0;
         border-right: none;
-        border-bottom: 2px solid var(--border);
-        /* Borde más visible */
+        border-bottom: 1px solid var(--border);
         display: flex;
         flex-direction: column;
+        background: #f9fafb;
+    }
+
+    .sidebar-header {
+        display: none;
+        /* Ocultar título para ganar espacio */
+    }
+
+    .thread-list {
+        display: flex;
+        /* Horizontal */
+        flex-direction: row;
+        overflow-x: auto;
+        /* Scroll lateral */
+        padding: 5px;
+        gap: 10px;
+        align-items: center;
+        scrollbar-width: none;
+        /* Ocultar barra scroll Firefox */
+    }
+
+    .thread-list::-webkit-scrollbar {
+        display: none;
+        /* Ocultar barra scroll Chrome/Safari */
+    }
+
+    .thread-item {
+        min-width: 200px;
+        /* Tarjetas anchas pero compactas */
+        max-width: 200px;
+        height: 70px;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        background: white;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        white-space: normal;
+        /* Permitir texto en dos líneas si cabe */
+    }
+
+    .thread-item.active {
+        border: 2px solid var(--primary);
+        background: #eff6ff;
+    }
+
+    .thread-thumb {
+        width: 40px;
+        height: 40px;
+    }
+
+    .thread-info h4 {
+        font-size: 0.85rem;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 130px;
+    }
+
+    .thread-info p {
+        display: none;
+        /* Ocultar preview de mensaje para ahorrar espacio visual */
     }
 
     .chat-window {
         width: 100%;
         flex: 1;
-        /* Ocupa el resto */
         min-height: 0;
         display: flex;
-        /* Siempre visible */
         flex-direction: column;
     }
 
-    /* MODO ENFOQUE: Cuando escribe, ocultar sidebar para dar sitio al teclado */
+    /* MODO ENFOQUE: Opcional, si queremos ocultarlo al escribir */
     .chat-container.input-focused .sidebar {
         display: none;
     }
 
-    /* Ocultar elementos de la lógica "WhatsApp" anterior */
     .back-button {
         display: none !important;
     }
 
-    /* Levantar el input para evitar toques accidentales en bordes inferiores */
+    /* Levantar el input para evitar toques accidentales */
     .chat-input-area {
-        padding-bottom: 30px;
-        /* Espacio extra abajo */
+        padding-bottom: 20px;
     }
 }
 
