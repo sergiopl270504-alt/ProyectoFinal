@@ -74,66 +74,40 @@ Las entidades principales y sus relaciones, definidas en `backend/src/models/ind
 
 ## 5. DOCUMENTACIÓN DETALLADA DEL BACKEND (API)
 
-Esta sección profundiza en la lógica interna, guiada por la documentación JSDoc implementada en el código fuente.
+> **NOTA:** Para una referencia exhaustiva de todas las funciones, parámetros y retornos del código, consulte el documento anexo `JAVADOC.md` generado para este proyecto.
+
+Esta sección profundiza en la lógica interna general.
 
 ### 5.1. Estructura de Controladores
 Los controladores (`backend/src/controllers`) encapsulan la lógica de negocio.
 
 #### 5.1.1. Gestión de Autenticación (`controladorAuth.js`)
-*   **`registrar`**: Orquesta el alta de usuarios.
-    *   *Validación:* Verifica que el email no exista y que la contraseña cumpla los requisitos de longitud.
-    *   *Hashing:* Utiliza el *hook* `beforeCreate` del modelo Usuario para hashear la contraseña con `bcrypt`.
-    *   *Confirmación:* Genera un token único (UUID) y envía un correo mediante `emailRegistro`.
-*   **`login`**: Gestiona el acceso seguro.
-    *   *Verificación:* Busca al usuario y utiliza el método de instancia `usuario.verificarPassword(password)` que compara el hash almacenado con el texto plano.
-    *   *JWT:* Si las credenciales son válidas, `generateJWT` crea un token firmado con el ID del usuario y una caducidad de 1 día.
+*   **`registrar`**: Orquesta el alta de usuarios con validación de datos.
+*   **`login`**: Gestiona el acceso seguro. Implementa una lógica de dos pasos: primero verifica credenciales (email/pass) y, si el usuario tiene `tfa_enabled = true`, detiene el flujo y solicita el código TOTP antes de emitir el JWT.
 
 #### 5.1.2. Gestión de Propiedades (`controladorPropiedades.js`)
-*   **`crearPropiedad`**:
-    *   Recibe datos del formulario (título, precio, imagen, etc.).
-    *   Asigna automáticamente el usuario autenticado (`req.usuario.id`) como propietario.
-    *   Almacena la ruta de la imagen seleccionada o subida.
-*   **`buscarPropiedades`**:
-    *   Implementa un motor de búsqueda avanzado utilizando operadores de Sequelize (`Op.like`) para filtrar por título o descripción.
-
-#### 5.1.3. Sistema de Mensajería (`controladorMensajes.js`)
-*   **`crearConsulta`**:
-    *   Inicia un hilo de conversación. Verifica que el usuario no sea el propietario del inmueble (evita auto-mensajes).
-*   **`obtenerMensajes`**:
-    *   Devuelve las conversaciones agrupadas. Si es admin, ve *todas* las consultas; si es usuario, solo las propias.
+*   **`crearPropiedad`**: Asigna automáticamente el usuario autenticado como propietario. Implementa lógica de *fallback* para imágenes: si no se provee una, asigna una de Unsplash aleatoria.
 
 ### 5.2. Modelado de Datos y Relaciones (ORM)
 Los modelos (`backend/src/models`) definen la estructura de las tablas.
 
-*   **`Usuario.js`**: Incluye métodos de instancia críticos como `verificarPassword` y scopes para excluir info sensible (password, tokens) en las consultas por defecto.
-*   **`Propiedad.js`**: Define campos con tipos de datos estrictos (DECIMAL para precios, TEXT para descripciones largas).
+*   **`Usuario.js`**:
+    *   `token_confirmacion`: Para validación de email y recuperación de contraseña.
+    *   `tfa_enabled` (Boolean): Flag maestro para activar 2FA.
+    *   `secret_2fa` (String): Secreto Base32 para TOTP.
+*   **`Propiedad.js`**: Define campos con tipos de datos estrictos.
 
 ### 5.3. Seguridad y Middleware
-Los *middlewares* (`backend/src/middleware`) actúan como guardianes de las rutas.
-
-*   **`checkAuth`**:
-    *   Intercepta cada petición protegida.
-    *   Extrae el token del header `Authorization: Bearer <token>`.
-    *   Verifica la firma digital usando `jwt.verify`.
-    *   Si es válido, inyecta el objeto `req.usuario` en la petición para uso posterior.
-*   **`checkAdmin`**:
-    *   Verifica si `req.usuario.tipo_usuario === 'admin'`. Si no, devuelve un error 403 (Prohibido).
+*   **`checkAuth`**: Guardián de rutas protegidas. Verifica JWT.
+*   **`checkAdmin`**: Middleware de autorización (Role-Based Access Control).
 
 ---
 
 ## 6. DOCUMENTACIÓN DEL FRONTEND
 
 El cliente web (`frontend/src`) consume la API mediante módulos JavaScript reutilizables.
-
-### 6.1. Capa de Comunicación (`api.js`)
-Este archivo exporta la función `request`, que actúa como *wrapper* de `fetch`:
-*   Añade automáticamente el header `Content-Type: application/json`.
-*   Inyecta el token JWT desde `localStorage` si existe.
-*   Centraliza el manejo de errores HTTP (401, 404, 500).
-
-### 6.2. Lógica de Interfaz (`propiedades.js`, `mensajes.js`)
-*   **`propiedades_final.js`**: Maneja el formulario de creación. Realiza validaciones en cliente (campos vacíos, formatos numéricos) antes de enviar la petición POST, reduciendo la carga al servidor.
-*   **`mensajes.js`**: Implementa lógica de *polling* (consultas periódicas) para simular tiempo real en el chat, actualizando la lista de mensajes cada 10 segundos.
+*   **`api.js`**: *Wrapper* centralizado para `fetch`, maneja inyección de tokens automáticamente.
+*   **`mensajes.js`**: Implementa lógica de *polling* silencioso (cada 10s) para actualización en tiempo real sin recargar la página.
 
 ---
 
@@ -141,14 +115,12 @@ Este archivo exporta la función `request`, que actúa como *wrapper* de `fetch`
 
 Casafinder implementa capas de seguridad por encima del estándar académico.
 
-### 7.1. Hashing de Contraseñas
-No se almacenan contraseñas en texto plano. Se utiliza `bcrypt` con un factor de coste (salt rounds) de 10, lo que hace computacionalmente inviable los ataques de fuerza bruta.
+### 7.1. Doble Factor de Autenticación (2FA)
+Implementación completa de TOTP (Time-Based One-Time Password):
+1.  **Activación**: Se genera un secreto Base32 usando `speakeasy`. Se personaliza el `otpauth_url` con el email del usuario para facilitar su identificación en la app (ej. "Casafinder (usuario@email.com)").
+2.  **Vinculación**: Se genera código QR dinámico.
+3.  **Login en 2 Pasos**: El endpoint `/auth/login` detecta si el 2FA está activo. Si lo está, no devuelve el token JWT, sino un flag `require2fa`. El frontend entonces redirige al usuario a la pantalla de verificación de código.
 
-### 7.2. Doble Factor de Autenticación (2FA)
-Alojado en `rutasAuth.js` y `controladorAuth.js`:
-1.  **Activación**: Se genera un secreto Base32 usando `speakeasy`.
-2.  **Vinculación**: Se crea un código QR (`qrcode`) que el usuario escanea con Google Authenticator.
-3.  **Verificación**: El servidor valida el código TOTP temporal generado por el usuario contra el secreto almacenado.
 
 ---
 

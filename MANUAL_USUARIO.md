@@ -35,25 +35,34 @@ Para garantizar la trazabilidad y seguridad de las comunicaciones:
 
 Esta sección aborda las capacidades del **Backoffice** de gestión.
 
-### 3.1. Alta de Activos Inmobiliarios
+### 2.3. Panel de Usuario (Nueva Funcionalidad)
+La plataforma incluye ahora un área personal accesible desde el menú "Hola, [Nombre]":
+1.  **Ajustes de Perfil:** Modifique su foto o datos de contacto.
+2.  **Seguridad (2FA):** Puede activar la "Autenticación de Dos Factores".
+    *   Se generará un código QR único.
+    *   Escanéelo con Google Authenticator o Microsoft Authenticator.
+    *   A partir de ese momento, necesitará el código de 6 dígitos para iniciar sesión (mayor seguridad).
+3.  **Gestión de Contraseña:** Módulo seguro para renovar sus credenciales.
+
+### 2.4. Chat Móvil Optimizado
+La interfaz de mensajes ha sido rediseñada para dispositivos móviles. Ahora funciona con una navegación fluida estilo "Historias", permitiéndole deslizar horizontalmente entre sus conversaciones activas sin perder de vista el chat actual.
+
+---
+
+## 3. MANUAL DE PROCEDIMIENTOS: PERFIL ADMINISTRADOR / AGENTE
+
+3.1. Alta de Activos Inmobiliarios
 La calidad de la información introducida impacta directamente en el posicionamiento SEO y la tasa de conversión.
 1.  Acceda a su **Panel de Control**.
 2.  Seleccione la opción **"Nuevo Activo"**.
 3.  **Directrices de Calidad de Datos:**
     *   **Título:** Utilice técnicas de *Copywriting*. Evite genéricos como "Piso en venta". Prefiera descripciones evocadoras: "Ático Lujoso con Terraza Panorámica".
-    *   **Geolocalización:** El sistema utiliza coordenadas precisas. Verifique la chincheta en el mapa interactivo, ya que esto determina la visibilidad en búsquedas por proximidad.
-    *   **Valoración:** Introduzca el precio final de mercado.
+    *   **Geolocalización:** El sistema utiliza coordenadas precisas. Verifique la chincheta en el mapa interactivo.
 
-### 3.2. Ciclo de Vida del Anuncio
-El sistema permite gestionar el estado de cada propiedad mediante un flujo de trabajo definido:
-*   **Borrador:** Estado inicial. Visible solo internamente.
-*   **Publicado:** Visible en el portal público.
-*   **Vendido:** Al concretar una operación, **no elimine el registro**. Cambie su estado a "Vendido".
-    *   *Valor Estratégico:* Mantener un histórico público de ventas refuerza la reputación de la agencia y genera confianza en el mercado.
+### 3.2. Gestión Avanzada de Mensajes
+*   **Indicadores de Estado:** Un punto rojo indica mensajes de clientes pendientes de respuesta.
+*   **Borrado de Hilos:** Ahora es posible eliminar conversaciones finalizadas o spam utilizando el icono de papelera. Esta acción es irreversible.
 
-### 3.3. Centro de Mensajería Unificada
-La plataforma integra un CRM ligero en la ruta `/mensajes`.
-*   **SLA (Acuerdo de Nivel de Servicio):** Se recomienda revisar la bandeja de entrada al inicio y final de la jornada. El tiempo de respuesta objetivo es inferior a 4 horas laborables.
 
 ---
 
