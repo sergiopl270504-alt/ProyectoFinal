@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restablecer Contraseña - Casafinder</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <h1>Casafinder</h1>
+        <h2>Restablecer Contraseña</h2>
+        <p style="text-align: center; color: #666; margin-bottom: 1rem;">Introduce el código que recibiste por email.
+        </p>
+        <form id="newPasswordForm">
+            <div class="form-group">
+                <label for="token">Código de Verificación</label>
+                <input type="text" id="token" placeholder="Ej: 123456" required
+                    style="text-align: center; letter-spacing: 2px;">
+            </div>
+            <div class="form-group">
+                <label for="password">Nueva Contraseña</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Guardar Password</button>
+        </form>
+        <p id="msg" class="error" style="background: #ecfdf5; color: #059669; display:none;"></p>
+    </div>
+    <script type="module">
+        import { request } from './src/api.js';
+
+        const params = new URLSearchParams(window.location.search);
+        const urlToken = params.get('token');
+
+        // Si hay token en URL, pre-rellenar
+        if (urlToken) {
+            document.getElementById('token').value = urlToken;
+        }
+
+        const form = document.getElementById('newPasswordForm');
+        const msg = document.getElementById('msg');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const tokenVal = document.getElementById('token').value;
+            const password = document.getElementById('password').value;
+
+            if (!tokenVal) {
+                alert('Debes introducir el código de verificación');
+                return;
+            }
+
+            try {
+                const res = await request(`/auth/olvide-password/${tokenVal}`, 'POST', { password });
+                msg.textContent = res.msg;
+                msg.style.display = 'block';
+                setTimeout(() => window.location.href = '/login.html', 3000);
+            } catch (error) {
+                msg.textContent = error.message;
+                msg.style.background = '#fef2f2';
+                msg.style.color = '#ef4444';
+                msg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

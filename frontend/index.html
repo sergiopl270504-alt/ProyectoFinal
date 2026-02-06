@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Casafinder - Inicio</title>
+  <link rel="stylesheet" href="./style.css?v=4">
+
+</head>
+
+<body>
+  <header>
+    <h1>Casafinder</h1>
+    <nav id="nav-links">
+      <!-- Enlaces dinámicos -->
+    </nav>
+  </header>
+  <div class="container">
+    <h2>Propiedades Destacadas</h2>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="Buscar propiedad...">
+      <button id="searchBtn" class="btn">Buscar</button>
+    </div>
+    <div id="propiedades-list">
+      <p>Cargando propiedades...</p>
+    </div>
+  </div>
+  <script type="module">
+    import { request } from './src/api.js?v=1000';
+
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    // Control de Acceso Estricto: Redirigir si no está logueado
+    if (!token || !user) {
+      window.location.href = '/login.html';
+    }
+
+    const nav = document.getElementById('nav-links');
+    const list = document.getElementById('propiedades-list');
+
+    if (token && user) {
+      let navContent = `<span>Hola, ${user.nombre}</span>`;
+      if (user.role === 'admin') {
+        navContent += `<a href="/crear-propiedad.html" style="margin-right: 1rem;">Crear Propiedad</a>`;
+        navContent += `<a href="/buzon.html" style="margin-right: 1rem;">Buzón</a>`;
+      }
+      navContent += `<a href="/perfil.html" style="margin-right: 1rem;">Mi Perfil</a>`;
+      navContent += `<a href="#" id="logout">Cerrar Sesión</a>`;
+      nav.innerHTML = navContent;
+
+      document.getElementById('logout').addEventListener('click', () => {
+        localStorage.clear();
+        window.location.reload();
+      });
+    } else {
+      nav.innerHTML = `
+                <a href="/login.html">Iniciar Sesión</a>
+                <a href="/registro.html">Registrarse</a>
+            `;
+    }
+
+    async function loadProperties(query = '') {
+      try {
+        const endpoint = query ? `/propiedades?search=${query}` : '/propiedades';
+        const properties = await request(endpoint);
+        if (properties.length === 0) {
+          list.innerHTML = '<p>No hay propiedades disponibles.</p>';
+          return;
+        }
+
+        if (user && user.role === 'admin') {
+          const totalValue = properties.reduce((acc, p) => acc + Number(p.precio), 0);
+          const totalSold = properties.filter(p => p.vendido).length;
+
+          const statsHTML = `
+                <div class="admin-stats-container">
+                    <div class="stat-card">
+                        <span class="stat-value">${properties.length}</span>
+                        <span class="stat-label">Propiedades</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">${totalValue.toLocaleString('es-ES', { maximumFractionDigits: 0 })} €</span>
+                        <span class="stat-label">Valor Cartera</span>
+                    </div>
+                    <div class="stat-card" style="border-bottom: 4px solid #c53030;">
+                        <span class="stat-value" style="color: #c53030;">${totalSold}</span>
+                        <span class="stat-label">Vendidas</span>
+                    </div>
+                </div>
+                <div style="text-align: right; margin-bottom: 2rem;">
+                    <button onclick="downloadReport()" class="btn btn-neutral" style="font-size: 0.8rem;">
+                        <i class="fas fa-file-invoice-dollar"></i> Descargar Balance de Ventas
+                    </button>
+                </div>
+            `;
+
+          // Inyectar antes de la lista, si no existe ya
+          const existingStats = document.getElementById('admin-stats');
+          if (existingStats) existingStats.remove();
+
+          const statsDiv = document.createElement('div');
+          statsDiv.id = 'admin-stats';
+          statsDiv.innerHTML = statsHTML;
+          list.parentNode.insertBefore(statsDiv, list);
+        } else if (user && user.role === 'usuario') {
+          const availableCount = properties.filter(p => !p.vendido).length;
+
+          const welcomeHTML = `
+                <div class="user-welcome-banner">
+                    <h2>¡Bienvenido/a a Casafinder, ${user.nombre}! 🏠</h2>
+                    <p>Tenemos <strong>${availableCount}</strong> propiedades exclusivas esperando por ti.</p>
+                </div>
+            `;
+
+          // Inyectar antes de la lista, si no existe ya
+          const existingBanner = document.getElementById('user-banner');
+          if (existingBanner) existingBanner.remove();
+
+          const bannerDiv = document.createElement('div');
+          bannerDiv.id = 'user-banner';
+          bannerDiv.innerHTML = welcomeHTML;
+          list.parentNode.insertBefore(bannerDiv, list);
+        }
+
+        // NAVIGATION UPDATE FOR USER
+        if (user && user.role === 'usuario') {
+          const nav = document.getElementById('nav-links');
+          // Check if link already exists to avoid duplication
+          if (!nav.innerHTML.includes('mis-mensajes.html')) {
+            // Insert before logout
+            const logoutBtn = document.getElementById('logout');
+            const messagesLink = document.createElement('a');
+            messagesLink.href = '/mis-mensajes.html';
+            messagesLink.style.marginRight = '1rem';
+            messagesLink.innerText = 'Mis Mensajes';
+            nav.insertBefore(messagesLink, logoutBtn);
+          }
+        }
+
+        list.innerHTML = properties.map((prop, index) => `
+                    <div class="card property-card-appear" style="animation-delay: ${index * 0.1}s">
+                        <div class="prop-img-container">
+                            <img src="${prop.imagen}" alt="${prop.titulo}" class="prop-img">
+                            ${prop.vendido ? '<span class="sold-badge">VENDIDA</span>' : ''}
+                        </div>
+                        <div class="card-content">
+                            <h3>${prop.titulo}</h3>
+                            <p>${prop.descripcion}</p>
+                            <p class="price">${Number(prop.precio).toLocaleString('es-ES')} €</p>
+                            <p><i class="fas fa-bed"></i> Habitaciones: ${prop.habitaciones} | <i class="fas fa-bath"></i> WC: ${prop.wc}</p>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-secondary pdf-btn" data-id="${prop.id}">PDF</button>
+                            ${(user && user.role !== 'admin') ? `<button class="btn btn-secondary contact-btn" data-id="${prop.id}" data-title="${prop.titulo}">Contactar</button>` : ''}
+                            ${(user && user.role === 'admin') ?
+            (!prop.vendido ? `<a href="/editar-propiedad.html?v=4&id=${prop.id}" class="btn btn-accent">Editar</a>` : `<a href="/editar-propiedad.html?v=4&id=${prop.id}" class="btn btn-neutral">Gestionar</a>`)
+            : ''}
+                        </div>
+                    </div>
+                `).join('');
+
+        document.querySelectorAll('.contact-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = e.target.getAttribute('data-id');
+            const title = e.target.getAttribute('data-title');
+            const msg = prompt(`Enviar mensaje para: ${title}`);
+            if (msg) sendInquiry(msg, id);
+          });
+        });
+
+        document.querySelectorAll('.pdf-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const id = e.target.getAttribute('data-id');
+            downloadPropertyPDF(id);
+          });
+        });
+      } catch (error) {
+        list.innerHTML = `<p style="color:red">Error al cargar propiedades: ${error.message}</p>`;
+      }
+    }
+
+    async function downloadPropertyPDF(id) {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        // Inline Fetch to avoid caching issues with api.js
+        const response = await fetch(`http://localhost:3000/propiedades/${id}/pdf`, {
+          method: 'GET',
+          headers
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(errText || 'Error descargando archivo');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `propiedad-${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      } catch (error) {
+        alert('Error descargando PDF (Inline): ' + error.message);
+      }
+    }
+
+    // ADDED: Global Report Download Function
+    window.downloadReport = async function () {
+      try {
+        const token = localStorage.getItem('token');
+        const headers = {
+          'Content-Type': 'application/json'
+        };
+        if (token) headers['Authorization'] = `Bearer ${token}`;
+
+        const response = await fetch(`http://localhost:3000/propiedades/reporte`, {
+          method: 'GET',
+          headers
+        });
+
+        if (!response.ok) {
+          const errText = await response.text();
+          throw new Error(errText || 'Error descargando informe');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `balance-ventas.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+      } catch (error) {
+        alert('Error descargando Balance: ' + error.message);
+      }
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', () => {
+      const query = document.getElementById('searchInput').value;
+      loadProperties(query);
+    });
+
+    loadProperties();
+
+    async function sendInquiry(mensaje, propertyId) {
+      try {
+        await request('/mensajes', 'POST', { mensaje, propertyId });
+        alert('Mensaje enviado correctamente');
+      } catch (error) {
+        alert(error.message);
+      }
+    }
+
+    loadProperties();
+  </script>
+</body>
+
+</html>

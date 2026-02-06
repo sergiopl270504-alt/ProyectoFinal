@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajustes de Cuenta | Casafinder</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .settings-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            color: #4b5563;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: #f9fafb;
+        }
+
+        .security-section {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .security-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        #qr-container img {
+            border: 1px solid #e5e7eb;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 0.5rem;
+            margin: 1rem auto;
+            display: block;
+            max-width: 200px;
+        }
+
+        .code-display {
+            background: #1f2937;
+            color: #a5f3fc;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            text-align: center;
+            letter-spacing: 2px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="contenedor contenido-header">
+            <div class="barra">
+                <a href="/">
+                    <h1>Casafinder</h1>
+                </a>
+                <nav class="navegacion" id="nav-links">
+                    <!-- JS rellena esto -->
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor seccion">
+        <div class="settings-container">
+            <h2 class="section-title"><i class="fas fa-user-cog"></i> Ajustes de Cuenta</h2>
+
+            <!-- Información Básica -->
+            <form id="profile-form">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="nombre" readonly style="cursor: not-allowed; opacity: 0.7;">
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico</label>
+                    <input type="email" id="email" readonly style="cursor: not-allowed; opacity: 0.7;">
+                </div>
+                <div class="form-group">
+                    <label>Rol de Usuario</label>
+                    <input type="text" id="role" readonly
+                        style="cursor: not-allowed; opacity: 0.7; text-transform: capitalize;">
+                </div>
+            </form>
+
+            <!-- Sección Contraseña -->
+            <div style="margin-top: 2rem; border-top: 2px solid #f3f4f6; padding-top: 1.5rem;">
+                <h3 style="color: #1f2937; margin-bottom: 1rem;"><i class="fas fa-key"></i> Cambiar Contraseña</h3>
+                <form id="change-password-form">
+                    <div class="form-group">
+                        <label>Contraseña Actual</label>
+                        <input type="password" id="pwd_actual" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nueva Contraseña</label>
+                        <input type="password" id="pwd_nueva" required minlength="6">
+                    </div>
+                    <button type="submit" class="boton boton-verde" style="width: auto;">Actualizar Contraseña</button>
+                </form>
+            </div>
+
+            <!-- Sección de Seguridad (2FA) -->
+            <div class="security-section">
+                <div class="security-header">
+                    <h3 style="margin:0; color: #064e3b;"><i class="fas fa-shield-alt"></i> Seguridad Avanzada</h3>
+                    <span id="status-badge" class="badge badge-danger">2FA INACTIVO</span>
+                </div>
+
+                <p id="security-desc">Protege tu cuenta activando la verificación en dos pasos.</p>
+
+                <div id="action-area" style="margin-top: 1.5rem;">
+                    <!-- Botones dinámicos -->
+                    <button id="btn-toggle-2fa" class="boton boton-verde">Activar 2FA</button>
+                </div>
+
+                <!-- Área de configuración desplegable -->
+                <div id="setup-area"
+                    style="display: none; margin-top: 2rem; border-top: 1px solid #bbf7d0; padding-top: 1rem;">
+                    <h4 style="text-align: center;">1. Escanea el código en Google Authenticator</h4>
+
+                    <div id="qr-container">
+                        <img id="qr-image" src="" alt="QR">
+                        <div id="secret-code" class="code-display"></div>
+                    </div>
+
+                    <h4 style="text-align: center; margin-top: 1.5rem;">2. Confirma con el código</h4>
+                    <p style="text-align: center; font-size: 0.9rem;">Introduce el código de 6 dígitos que aparece en tu
+                        app.</p>
+
+                    <div style="text-align: center; max-width: 200px; margin: 0 auto;">
+                        <input type="text" id="verify-code-input" placeholder="000000" maxlength="6"
+                            style="text-align: center; font-size: 1.5rem; letter-spacing: 5px;">
+                        <button onclick="confirmAndActivate()" class="boton boton-verde"
+                            style="margin-top: 1rem; width: 100%;">Confirmar y Activar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón Volver -->
+            <div style="margin-top: 2rem; text-align: right;">
+                <a href="/" style="color: #6b7280; text-decoration: none;">&larr; Volver al Catálogo</a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { request } from './src/api.js';
+
+        // Auth Check
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/login.html';
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        // Cargar Datos del Usuario
+        document.getElementById('nombre').value = user.nombre || '';
+        document.getElementById('email').value = user.email || 'usuario@correo.com'; // El objeto user del login a veces no trae email completo, depende del backend
+        document.getElementById('role').value = user.role || 'usuario';
+
+        // Nav Links
+        const nav = document.getElementById('nav-links');
+        nav.innerHTML = `<span>Hola, ${user.nombre}</span> <a href="/">Inicio</a> <a href="#" id="logout">Cerrar Sesión</a>`;
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = '/login.html';
+        });
+
+        // Lógica Cambiar Password
+        document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const current = document.getElementById('pwd_actual').value;
+            const newer = document.getElementById('pwd_nueva').value;
+
+            try {
+                const res = await request('/auth/cambiar-password', 'POST', {
+                    password_actual: current,
+                    password_nuevo: newer
+                });
+                alert(res.msg);
+                document.getElementById('change-password-form').reset();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+
+        // Lógica 2FA
+        const statusBadge = document.getElementById('status-badge');
+        const btnToggle = document.getElementById('btn-toggle-2fa');
+        const setupArea = document.getElementById('setup-area');
+        const securityDesc = document.getElementById('security-desc');
+
+        async function check2FAStatus() {
+            try {
+                const status = await request('/auth/2fa/status');
+
+                if (status.enabled) {
+                    statusBadge.textContent = '2FA ACTIVADO';
+                    statusBadge.className = 'badge badge-success';
+                    securityDesc.textContent = 'Tu cuenta está protegida con máxima seguridad.';
+
+                    btnToggle.textContent = 'Desactivar 2FA';
+                    btnToggle.className = 'boton boton-rojo';
+                    btnToggle.style.backgroundColor = '#ef4444';
+                    btnToggle.onclick = disable2FA;
+                } else {
+                    statusBadge.textContent = '2FA DESACTIVADO';
+                    statusBadge.className = 'badge badge-danger';
+                    securityDesc.textContent = 'Recomendamos activar 2FA para evitar accesos no autorizados.';
+
+                    btnToggle.textContent = 'Activar 2FA';
+                    btnToggle.className = 'boton boton-verde';
+                    btnToggle.style.backgroundColor = '#10b981';
+                    btnToggle.onclick = enable2FA;
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function enable2FA() {
+            try {
+                const data = await request('/auth/2fa/setup', 'POST');
+                setupArea.style.display = 'block';
+                document.getElementById('qr-image').src = data.qrCode;
+                document.getElementById('secret-code').textContent = data.secret;
+                btnToggle.style.display = 'none'; // Ocultar botón durante el setup
+            } catch (error) {
+                alert('Error iniciando setup: ' + error.message);
+            }
+        }
+
+        async function confirmAndActivate() {
+            const code = document.getElementById('verify-code-input').value;
+            if (code.length < 6) return alert('Introduce el código de 6 dígitos');
+
+            try {
+                await request('/auth/2fa/activate', 'POST', { token: code });
+                alert('¡2FA Activado Correctamente!');
+                window.location.reload();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        async function disable2FA() {
+            if (!confirm('¿Seguro que quieres eliminar esta capa de seguridad?')) return;
+            try {
+                await request('/auth/2fa/disable', 'POST');
+                window.location.reload();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        // Expose function globally for the onclick handler
+        window.confirmAndActivate = confirmAndActivate;
+
+        check2FAStatus();
+    </script>
+</body>
+
+</html>

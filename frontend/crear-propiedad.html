@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Propiedad - Casafinder</title>
+    <!-- Importamos los estilos principales -->
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <!-- Encabezado principal con navegación -->
+    <header>
+        <h1>Casafinder</h1>
+        <nav>
+            <a href="/">Volver</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- 
+            Script de seguridad inline:
+            Verificamos si el usuario es administrador antes de cargar el resto del contenido.
+            Si no lo es, lo mandamos de vuelta al inicio.
+        -->
+        <script>
+            const usuarioActual = JSON.parse(localStorage.getItem('user'));
+            // Si no hay usuario o no es admin, fuera de aquí
+            if (!usuarioActual || usuarioActual.role !== 'admin') {
+                window.location.href = '/';
+            }
+        </script>
+
+        <!-- Contenedor del formulario de creación -->
+        <div class="auth-container" style="margin-top: 2rem; max-width: 600px;">
+            <h2 style="margin-bottom: 2rem;">Nueva Propiedad</h2>
+
+            <form id="propertyForm" style="text-align: left;">
+                <!-- Título de la propiedad -->
+                <div class="form-group">
+                    <label>Título</label>
+                    <input type="text" id="titulo" required>
+                </div>
+
+                <!-- Descripción detallada -->
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea id="descripcion" rows="4"
+                        style="width:100%; padding: 0.5rem; border: 1px solid var(--border); border-radius: 6px; font-family: inherit;"></textarea>
+                </div>
+
+                <!-- Precio -->
+                <div class="form-group">
+                    <label>Precio (€)</label>
+                    <input type="number" id="precio" required>
+                </div>
+
+                <!-- Detalles específicos: Habitaciones y Baños en la misma fila -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Habitaciones</label>
+                        <input type="number" id="habitaciones" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Baños</label>
+                        <input type="number" id="wc" required>
+                    </div>
+                </div>
+
+                <!-- ¿Tiene estacionamiento? -->
+                <div class="form-group">
+                    <label>Estacionamiento</label>
+                    <select id="estacionamiento"
+                        style="width: 100%; padding: 1rem; border: 1px solid var(--border); border-radius: 6px; background: #f8fafc;">
+                        <option value="" disabled selected>-- Seleccione --</option>
+                        <option value="true">Sí</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <!-- Ubicación -->
+                <div class="form-group">
+                    <label>Calle</label>
+                    <input type="text" id="calle" required>
+                </div>
+
+                <!-- Botón de envío -->
+                <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Guardar Propiedad</button>
+            </form>
+
+            <!-- Mensaje de feedback para el usuario -->
+            <p id="msg" class="message" style="margin-top: 1rem;"></p>
+        </div>
+    </div>
+
+    <!-- Lógica del formulario -->
+    <script type="module" src="./src/propiedades_final.js"></script>
+</body>
+
+</html>

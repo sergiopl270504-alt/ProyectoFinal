@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicia Sesión - Casafinder</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <div class="auth-container">
+    <h1>Casafinder</h1>
+    <h2>Iniciar Sesión</h2>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required>
+      </div>
+      <button type="submit">Entrar</button>
+    </form>
+    <p id="errorMsg" class="error"></p>
+    <p>¿Olvidaste tu contraseña? <a href="/recuperar.html">Recuperar</a></p>
+    <p>¿No tienes cuenta? <a href="/registro.html">Regístrate</a></p>
+  </div>
+  <script type="module" src="./src/login.js"></script>
+</body>
+
+</html>

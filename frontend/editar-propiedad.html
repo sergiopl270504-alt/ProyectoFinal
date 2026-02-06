@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Propiedad - Casafinder</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <header>
+        <h1><a href="/" style="color: inherit; text-decoration: none;">Casafinder</a></h1>
+    </header>
+    <div class="container">
+        <script>
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (!user || user.role !== 'admin') {
+                window.location.href = '/';
+            }
+        </script>
+        <h2>Editar Propiedad</h2>
+        <form id="editPropertyForm" class="auth-container" style="max-width: 600px; text-align: left;">
+            <div class="form-group">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio (€)</label>
+                <input type="number" id="precio" name="precio" required>
+            </div>
+            <div class="form-group">
+                <label for="habitaciones">Habitaciones</label>
+                <input type="number" id="habitaciones" name="habitaciones" required>
+            </div>
+            <div class="form-group">
+                <label for="wc">Baños</label>
+                <input type="number" id="wc" name="wc" required>
+            </div>
+            <div class="form-group">
+                <label for="estacionamiento">Estacionamiento</label>
+                <select id="estacionamiento" name="estacionamiento">
+                    <option value="true">Sí</option>
+                    <option value="false">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="vendido" style="color: red; font-weight: bold;">¿VENDIDA?</label>
+                <select id="vendido" name="vendido">
+                    <option value="false">No (Disponible)</option>
+                    <option value="true">SÍ (Vendida)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="calle">Calle</label>
+                <input type="text" id="calle" name="calle" required>
+            </div>
+            <!-- Hidden fields for lat/lng simplification -->
+            <input type="hidden" id="lat" name="lat" value="0">
+            <input type="hidden" id="lng" name="lng" value="0">
+
+            <button type="submit" class="btn">Guardar Cambios</button>
+            <button type="button" id="deleteBtn" class="btn" style="background: #ef4444; margin-top: 1rem;">Eliminar
+                Propiedad</button>
+        </form>
+    </div>
+
+    <script type="module">
+        import { request } from './src/api.js?v=2';
+
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        if (!id) {
+            alert('No se especificó propiedad');
+            window.location.href = '/';
+        }
+
+        const form = document.getElementById('editPropertyForm');
+
+        // Load Data
+        async function loadData() {
+            try {
+                const prop = await request(`/propiedades/${id}`);
+                document.getElementById('titulo').value = prop.titulo;
+                document.getElementById('descripcion').value = prop.descripcion;
+                document.getElementById('precio').value = prop.precio;
+                document.getElementById('habitaciones').value = prop.habitaciones;
+                document.getElementById('wc').value = prop.wc;
+                document.getElementById('calle').value = prop.calle;
+                document.getElementById('estacionamiento').value = prop.estacionamiento.toString();
+                document.getElementById('vendido').value = (prop.vendido || false).toString();
+            } catch (error) {
+                alert('Error cargando datos: ' + error.message);
+            }
+        }
+
+        // Update
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                await request(`/propiedades/${id}`, 'PUT', data);
+                alert('Propiedad actualizada');
+                window.location.href = '/';
+            } catch (error) {
+                alert('Error al actualizar: ' + error.message);
+            }
+        });
+
+        // Delete - Strict Confirmation
+        document.getElementById('deleteBtn').addEventListener('click', async () => {
+            const verification = prompt('Para confirmar la eliminación, escribe "BORRAR" en mayúsculas:');
+            if (verification === 'BORRAR') {
+                try {
+                    await request(`/propiedades/${id}`, 'DELETE');
+                    window.location.href = '/';
+                } catch (error) {
+                    alert('Error al eliminar: ' + error.message);
+                }
+            } else if (verification !== null) {
+                alert('Eliminación cancelada. El texto no coincide.');
+            }
+        });
+
+        loadData();
+    </script>
+</body>
+
+</html>

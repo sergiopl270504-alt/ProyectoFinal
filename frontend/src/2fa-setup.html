@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurar 2FA | Casafinder</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        .qr-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            margin: 2rem auto;
+        }
+
+        .qr-card img {
+            margin: 1rem 0;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .code-box {
+            background: #f3f4f6;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-family: monospace;
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-active {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-inactive {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <div class="contenedor contenido-header">
+            <div class="barra">
+                <a href="/">
+                    <img src="https://dewey.tailorbrands.com/production/brand_version_mockup_image/449/9329713449_ee96531d-b654-4f4d-965a-074472d63335.png?cb=1736787687"
+                        alt="Logotipo de Bienes Raices" width="150" height="auto">
+                </a>
+                <nav class="navegacion" id="nav-links">
+                    <!-- JS rellena esto -->
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor seccion">
+        <div class="qr-card" id="main-content">
+            <h2>Autenticación de Doble Factor (2FA)</h2>
+            <div id="loading">Verificando estado...</div>
+
+            <!-- Estado Activo -->
+            <div id="active-state" style="display: none;">
+                <div class="status-badge status-active">Estado: ACTIVADO</div>
+                <p>Tu cuenta está protegida. Se solicitará un código cada vez que inicies sesión.</p>
+                <button id="btn-disable" class="boton boton-rojo"
+                    style="margin-top: 1rem; background-color: #ef4444; color: white;">Desactivar 2FA</button>
+            </div>
+
+            <!-- Estado Inactivo (Setup) -->
+            <div id="inactive-state" style="display: none;">
+                <div class="status-badge status-inactive">Estado: DESACTIVADO</div>
+                <p style="margin-top: 1rem;">Escanea el código QR con tu aplicación de autenticación (Google
+                    Authenticator, Authy, etc.).</p>
+
+                <div id="qr-container">
+                    <img id="qr-image" src="" alt="Código QR 2FA">
+                    <p>O introduce este código manualmente:</p>
+                    <div id="secret-code" class="code-box"></div>
+                    <p style="color: green; font-weight: bold; margin-top: 1rem;">¡Una vez escaneado, tu cuenta estará
+                        protegida!</p>
+                </div>
+            </div>
+
+            <div id="error-msg" style="color: red; display: none; margin-top: 1rem;"></div>
+            <a href="/" class="boton boton-verde" style="margin-top: 1rem; display: inline-block;">Volver al Inicio</a>
+        </div>
+    </main>
+
+    <script type="module">
+        import { request } from './api.js';
+
+        // Check auth basic
+        const token = localStorage.getItem('token');
+        if (!token) window.location.href = '/login.html';
+
+        // Nav Setup
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            document.getElementById('nav-links').innerHTML = `<span>Hola, ${user.nombre}</span> <a href="/">Inicio</a>`;
+        }
+
+        async function loadStatus() {
+            try {
+                // 1. Obtener Estado
+                const status = await request('/auth/2fa/status');
+                document.getElementById('loading').style.display = 'none';
+
+                if (status.enabled) {
+                    // Mostrar UI Activado
+                    document.getElementById('active-state').style.display = 'block';
+                    document.getElementById('inactive-state').style.display = 'none';
+                } else {
+                    // Mostrar UI Setup (Activar)
+                    document.getElementById('active-state').style.display = 'none';
+                    document.getElementById('inactive-state').style.display = 'block';
+                    loadQR();
+                }
+
+            } catch (error) {
+                document.getElementById('loading').textContent = 'Error cargando estado';
+                console.error(error);
+            }
+        }
+
+        async function loadQR() {
+            try {
+                const data = await request('/auth/2fa/setup', 'POST');
+                document.getElementById('qr-image').src = data.qrCode;
+                document.getElementById('secret-code').textContent = data.secret;
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function disable2FA() {
+            if (!confirm('¿Estás seguro de desactivar la protección en dos pasos? Tu cuenta será menos segura.')) return;
+
+            try {
+                await request('/auth/2fa/disable', 'POST');
+                alert('2FA Desactivado correctamente.');
+                window.location.reload();
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function showError(msg) {
+            const el = document.getElementById('error-msg');
+            el.style.display = 'block';
+            el.textContent = msg;
+        }
+
+        // Event Listeners
+        document.getElementById('btn-disable').addEventListener('click', disable2FA);
+
+        // Init
+        loadStatus();
+    </script>
+</body>
+
+</html>

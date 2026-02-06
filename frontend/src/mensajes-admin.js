@@ -1,0 +1,150 @@
+import { request } from './api.js?v=999';
+
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user'));
+
+if (!token || !user) {
+    window.location.href = '/login.html';
+}
+
+const threadList = document.getElementById('thread-list');
+const noChat = document.getElementById('no-chat');
+const activeChat = document.getElementById('active-chat');
+const chatTitle = document.getElementById('chat-title');
+const chatSubtitle = document.getElementById('chat-subtitle');
+const chatMessages = document.getElementById('chat-messages');
+const messageInput = document.getElementById('message-input');
+const sendBtn = document.getElementById('send-btn');
+
+let currentInquiryId = null;
+
+// Cargar lista de hilos
+/**
+ * Carga la lista global de todas las conversaciones para el administrador.
+ * 
+ * Muestra indicador de mensajes no leídos (punto rojo) si el último mensaje es del usuario.
+ */
+async function loadThreads() {
+    try {
+        console.log('Cargando conversaciones...');
+        const inquiries = await request('/mensajes'); // Endpoint actualizado
+        console.log('Conversaciones cargadas:', inquiries);
+
+        if (inquiries.length === 0) {
+            threadList.innerHTML = '<div style="padding:1rem">No hay mensajes.</div>';
+            return;
+        }
+
+        threadList.innerHTML = inquiries.map(inq => {
+            const lastMsg = inq.mensajes && inq.mensajes.length > 0 ? inq.mensajes[0] : null;
+            const preview = lastMsg ? lastMsg.contenido : inq.mensaje;
+            const userName = inq.usuario ? inq.usuario.nombre_completo : 'Usuario';
+
+            // Indicador visual si es mensaje nuevo (último mensaje es de usuario y no admin)
+            const isUnanswered = lastMsg && lastMsg.remitente === 'usuario';
+            const statusDot = isUnanswered ? '<span style="color:red; font-size:1.5rem;">•</span>' : '';
+
+            return `
+            <div class="thread-item ${currentInquiryId == inq.id ? 'active' : ''}" onclick="window.selectThread('${inq.id}')">
+                 <img src="${inq.propiedad ? inq.propiedad.imagen : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48cmVjdCB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIGZpbGw9IiNjY2MiLz48L3N2Zz4='}" class="thread-thumb" alt="Prop">
+                <div class="thread-info">
+                    <div style="display:flex; justify-content:space-between;">
+                        <h4>${inq.propiedad ? inq.propiedad.titulo : 'Propiedad eliminada'}</h4>
+                        ${statusDot}
+                    </div>
+                    <p style="color: #3b82f6; font-size: 0.75rem; margin-bottom: 0.2rem;">${userName}</p>
+                    <p>${preview || 'Sin mensajes'}</p>
+                </div>
+            </div>
+        `}).join('');
+
+    } catch (error) {
+        console.error('Error cargando hilos:', error);
+        threadList.innerHTML = `<p style="color:red; padding:1rem">Error: ${error.message}</p>`;
+    }
+}
+
+// Hacer global
+/**
+ * Selecciona una conversación para gestión.
+ * 
+ * @param {string} id - ID de la consulta.
+ */
+window.selectThread = async (id) => {
+    currentInquiryId = id;
+
+    document.querySelectorAll('.thread-item').forEach(el => el.classList.remove('active'));
+
+    noChat.style.display = 'none';
+    activeChat.style.display = 'flex';
+
+    await loadMessages(id);
+    loadThreads();
+};
+
+// Cargar mensajes individuales
+/**
+ * Carga el historial de mensajes de la consulta seleccionada.
+ * 
+ * Muestra información extendida del usuario (nombre, email) en la cabecera del chat.
+ * 
+ * @param {string} id - ID de la consulta.
+ */
+async function loadMessages(id) {
+    try {
+        const inquiry = await request(`/mensajes/${id}`); // Endpoint actualizado
+
+        chatTitle.innerText = inquiry.propiedad ? inquiry.propiedad.titulo : 'Propiedad eliminada';
+        chatSubtitle.innerText = inquiry.usuario ? `${inquiry.usuario.nombre_completo} (${inquiry.usuario.correo_electronico})` : 'Usuario desconocido';
+
+        chatMessages.innerHTML = inquiry.mensajes.map(msg => {
+            const isAdmin = msg.remitente === 'admin';
+
+            return `
+            <div class="message-bubble ${isAdmin ? 'mine' : 'theirs'}">
+                ${msg.contenido}
+                <span class="message-time">${new Date(msg.fecha_envio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+            </div>
+        `}).join('');
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    } catch (error) {
+        console.error(error);
+        alert('Error cargando mensajes del chat');
+    }
+}
+
+sendBtn.addEventListener('click', sendMessage);
+messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+// Enviar respuesta
+/**
+ * Envía una respuesta administrativa.
+ * 
+ * @async
+ */
+async function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text || !currentInquiryId) return;
+
+    try {
+        await request(`/mensajes/${currentInquiryId}/reply`, 'PUT', { respuesta: text }); // Endpoint actualizado
+        messageInput.value = '';
+        await loadMessages(currentInquiryId);
+        loadThreads();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+// Carga inicial
+loadThreads();
+
+// Polling
+setInterval(() => {
+    if (currentInquiryId) loadMessages(currentInquiryId);
+    loadThreads();
+}, 10000);

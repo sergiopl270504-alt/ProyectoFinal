@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Contraseña - Casafinder</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <h1>Casafinder</h1>
+        <h2>Recupera tu acceso</h2>
+        <form id="recoveryForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <button type="submit">Enviar Instrucciones</button>
+        </form>
+        <p id="msg" class="error" style="background: #e0f2fe; color: #0284c7; display:none;"></p>
+        <p><a href="/login.html">Volver al Login</a></p>
+    </div>
+    <script type="module">
+        import { request } from './src/api.js';
+
+        const form = document.getElementById('recoveryForm');
+        const msg = document.getElementById('msg');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+
+            try {
+                const res = await request('/auth/olvide-password', 'POST', { email });
+                msg.textContent = 'Código enviado. Redirigiendo...';
+                msg.style.display = 'block';
+                setTimeout(() => window.location.href = '/nueva-contrasena.html', 1500);
+            } catch (error) {
+                msg.textContent = error.message;
+                msg.style.background = '#fef2f2';
+                msg.style.color = '#ef4444';
+                msg.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casafinder - Registro</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .links {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .links a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1><a href="/" style="color:white; text-decoration:none;">Casafinder</a></h1>
+    </header>
+
+    <div class="auth-container">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Crear Cuenta</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label>Nombre Completo</label>
+                <input type="text" id="nombre" required placeholder="Ej. Juan Pérez">
+            </div>
+            <div class="form-group">
+                <label>Teléfono Móvil</label>
+                <input type="tel" id="movil" required placeholder="Ej. 600123456" pattern="[67][0-9]{8}"
+                    title="Debe ser un móvil español válido (Empieza por 6 o 7, 9 dígitos)">
+            </div>
+            <div class="form-group">
+                <label>Correo Electrónico</label>
+                <input type="email" id="email" required placeholder="usuario@ejemplo.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn">Registrarse</button>
+        </form>
+        <div class="links">
+            <p>¿Ya tienes cuenta? <a href="/login.html">Inicia Sesión</a></p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { request } from './src/api.js';
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const movil = document.getElementById('movil').value;
+
+            try {
+                const res = await request('/auth/registro', 'POST', {
+                    nombre_completo: nombre,
+                    correo_electronico: email,
+                    contrasena: password,
+                    movil
+                });
+                alert(res.msg || 'Registro exitoso. Por favor inicia sesión.');
+                window.location.href = '/login.html';
+            } catch (error) {
+                alert(error.message);
+            }
+        });
+    </script>
+</body>
+
+</html>
