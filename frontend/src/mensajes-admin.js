@@ -78,20 +78,9 @@ window.selectThread = async (id) => {
     noChat.style.display = 'none';
     activeChat.style.display = 'flex';
 
-    // MODO MÓVIL: Switch a vista de chat
-    document.querySelector('.chat-container').classList.add('mobile-chat-active');
-
     await loadMessages(id);
     loadThreads();
 };
-
-// Navegación Móvil: Volver a lista
-const backBtn = document.querySelector('.back-button');
-if (backBtn) {
-    backBtn.addEventListener('click', () => {
-        document.querySelector('.chat-container').classList.remove('mobile-chat-active');
-    });
-}
 // NOTA: Eliminada lógica antigua de focus
 
 
