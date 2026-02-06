@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Javadoc - Casafinder API</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --sidebar-bg: #f8fafc;
+            --sidebar-width: 280px;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            color: var(--text-main);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            padding: 2rem 1rem;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-header {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            padding-left: 0.5rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem;
+            color: var(--text-main);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #e0e7ff;
+            color: var(--primary);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 2.5rem;
+            color: #334155;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            color: var(--primary);
+            font-family: 'Consolas', monospace;
+            display: flex;
+            align-items: center;
+        }
+
+        h4::before {
+            content: 'ƒ';
+            margin-right: 0.5rem;
+            color: #94a3b8;
+            font-weight: normal;
+        }
+
+        p {
+            line-height: 1.7;
+            color: #475569;
+            max-width: 800px;
+        }
+
+        code {
+            background: #f1f5f9;
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            color: #ec4899;
+        }
+
+        ul {
+            margin-left: 1.5rem;
+            line-height: 1.7;
+            color: #475569;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .method-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+        }
+
+        .tag.post {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .tag.get {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .tag.auth {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 1rem;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <a href="#" class="brand">Casafinder API</a>
+
+        <div class="nav-section">
+            <div class="nav-header">Backend</div>
+            <a href="#controladorAuth" class="nav-link">Autenticación</a>
+            <a href="#controladorPropiedades" class="nav-link">Propiedades</a>
+            <a href="#controladorMensajes" class="nav-link">Mensajes</a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-header">Frontend</div>
+            <a href="#frontend-mensajes" class="nav-link">Scripts de Mensajería</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Referencia Técnica (Javadoc)</h1>
+        <p>Documentación técnica de controladores y funciones del sistema Casafinder.</p>
+        <p><strong>Versión:</strong> 1.0 &nbsp;|&nbsp; <strong>Fecha:</strong> Febrero 2026</p>
+
+        <section id="controladorAuth">
+            <h2>1. Controlador de Autenticación</h2>
+            <p>Ubicación: <code>backend/src/controllers/controladorAuth.js</code></p>
+
+            <div class="method-card">
+                <h4>registrar(req, res)</h4>
+                <p>Registra un nuevo usuario en el sistema con validación y hashing de contraseña.</p>
+                <ul>
+                    <li><strong>Parámetros:</strong>
+                        <ul>
+                            <li><code>req.body.nombre_completo</code>: Nombre real del usuario.</li>
+                            <li><code>req.body.correo_electronico</code>: Email único en el sistema.</li>
+                            <li><code>req.body.contrasena</code>: Contraseña segura.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Retorno:</strong> JSON indicando éxito o errores de validación.</li>
+                </ul>
+            </div>
+
+            <div class="method-card">
+                <h4>login(req, res)</h4>
+                <p>Gestiona el inicio de sesión. Soporta flujo estándar y 2FA.</p>
+                <ul>
+                    <li><strong>Lógica:</strong> Si el usuario tiene <code>tfa_enabled</code>, no devuelve token, sino
+                        un indicador <code>require2fa</code>.</li>
+                    <li><strong>Retorno Exitoso:</strong> <code>{ token: JWT, usuario: Object }</code></li>
+                </ul>
+            </div>
+
+            <div class="method-card">
+                <h4>setup2FA(req, res)</h4>
+                <p>Inicia el proceso de configuración de Doble Factor.</p>
+                <ul>
+                    <li><strong>Lógica:</strong> Genera un secreto TOTP único y devuelve una URL para código QR.</li>
+                    <li><strong>Detalle:</strong> El emisor del QR se establece como "Casafinder (email)" para fácil
+                        identificación.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="controladorPropiedades">
+            <h2>2. Controlador de Propiedades</h2>
+            <p>Ubicación: <code>backend/src/controllers/controladorPropiedades.js</code></p>
+
+            <div class="method-card">
+                <h4>obtenerPropiedades(req, res)</h4>
+                <p>Recupera el listado público de inmuebles. Soporta filtrado.</p>
+            </div>
+
+            <div class="method-card">
+                <h4>crearPropiedad(req, res)</h4>
+                <p>Da de alta una nueva propiedad vinculada al usuario autenticado.</p>
+                <ul>
+                    <li><strong>Lógica:</strong> Si no se proporciona imagen, el sistema asigna una de stock aleatoria
+                        de Unsplash.</li>
+                </ul>
+            </div>
+
+            <div class="method-card">
+                <h4>descargarPDF(req, res)</h4>
+                <p>Genera y transmite un folleto PDF de la propiedad al vuelo.</p>
+                <ul>
+                    <li><strong>Salida:</strong> Stream binario <code>application/pdf</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="controladorMensajes">
+            <h2>3. Controlador de Mensajes</h2>
+            <p>Ubicación: <code>backend/src/controllers/controladorMensajes.js</code></p>
+
+            <div class="method-card">
+                <h4>crearConsulta(req, res)</h4>
+                <p>Inicia un hilo de chat. Impide que un propietario se escriba a sí mismo.</p>
+            </div>
+        </section>
+
+        <section id="frontend-mensajes">
+            <h2>4. Scripts Frontend</h2>
+            <p>Ubicación: <code>frontend/src/mensajes.js</code></p>
+
+            <div class="method-card">
+                <h4>loadMessages(id, backgroundUpdate)</h4>
+                <p>Renderiza el chat activo.</p>
+                <ul>
+                    <li><strong>Param: backgroundUpdate</strong> (Bool) - Si es true, silencia el indicador
+                        "Cargando..." para permitir actualizaciones en segundo plano sin parpadeos.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+
+</html>
