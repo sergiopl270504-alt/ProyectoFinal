@@ -215,6 +215,55 @@
                 flex: 1;
                 min-height: 0;
             }
-        }
+    </style>
+</head>
 
-        </head><body><header><h1>Casafinder Admin</h1><nav><a href="/">Volver al Inicio</a></nav></header><div class="chat-container" style="margin-top: 1rem;">< !-- Sidebar: Thread List --><div class="sidebar"><div class="sidebar-header">Buzón de Entrada </div><div id="thread-list" class="thread-list"><div style="padding:1rem; text-align:center; color:#666;">Cargando...</div></div></div>< !-- Main Chat Area --><div class="chat-window"><div id="no-chat" class="no-chat-selected"><p>Selecciona un mensaje para responder</p></div><div id="active-chat" style="display: none; height: 100%; flex-direction: column;"><div class="chat-header"><div><h3 id="chat-title" style="margin:0;">Propiedad</h3><small id="chat-subtitle" style="color: #666;">Usuario</small></div></div><div id="chat-messages" class="chat-messages">< !-- Messages go here --></div><div class="chat-input-area"><input type="text" id="message-input" placeholder="Escribe una respuesta..." autocomplete="off"><button id="send-btn" class="btn btn-accent" style="margin:0;">Responder</button></div></div></div></div><script type="module" src="./src/mensajes-admin.js?v=2"></script></body></html>
+<body>
+    <header>
+        <h1>Casafinder Admin</h1>
+        <nav>
+            <a href="/">Volver al Inicio</a>
+        </nav>
+    </header>
+
+    <div class="chat-container" style="margin-top: 1rem;">
+        <!-- Sidebar: Thread List -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                Buzón de Entrada
+            </div>
+            <div id="thread-list" class="thread-list">
+                <div style="padding:1rem; text-align:center; color:#666;">Cargando...</div>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-window">
+            <div id="no-chat" class="no-chat-selected">
+                <p>Selecciona un mensaje para responder</p>
+            </div>
+
+            <div id="active-chat" style="display: none; height: 100%; flex-direction: column;">
+                <div class="chat-header">
+                    <div>
+                        <h3 id="chat-title" style="margin:0;">Propiedad</h3>
+                        <small id="chat-subtitle" style="color: #666;">Usuario</small>
+                    </div>
+                </div>
+
+                <div id="chat-messages" class="chat-messages">
+                    <!-- Messages go here -->
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="message-input" placeholder="Escribe una respuesta..." autocomplete="off">
+                    <button id="send-btn" class="btn btn-accent" style="margin:0;">Responder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./src/mensajes-admin.js?v=2"></script>
+</body>
+
+</html>
