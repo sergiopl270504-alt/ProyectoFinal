@@ -190,38 +190,6 @@
             font-size: 3rem;
             margin-bottom: 1rem;
         }
-
-        @media (max-width: 768px) {
-            body {
-                height: 100dvh;
-                /* Dynamic viewport height fix for mobile browsers */
-            }
-
-            .chat-container {
-                flex-direction: column;
-                /* Altura fija restando el header aprox */
-                height: calc(100dvh - 120px);
-            }
-
-            .sidebar {
-                width: 100%;
-                height: 110px;
-                /* Lista de chats pequeña arriba */
-                flex-shrink: 0;
-                border-right: none;
-                border-bottom: 1px solid #e5e7eb;
-            }
-
-            .chat-window {
-                flex: 1;
-                min-height: 0;
-                /* Permite scroll interno */
-            }
-
-            .chat-messages {
-                padding: 1rem;
-            }
-        }
     </style>
 </head>
 
@@ -257,6 +225,7 @@
 
             <div id="active-chat" style="display: none; height: 100%; flex-direction: column;">
                 <div class="chat-header">
+                    <button class="back-button" id="back-btn-user" onclick="window.closeChat()">⬅</button>
                     <h3 id="chat-title" style="margin:0;">Propiedad</h3>
                 </div>
 

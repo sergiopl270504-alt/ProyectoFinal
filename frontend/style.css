@@ -525,14 +525,11 @@ button,
 /* --- RESPONSIVE / MÓVIL --- */
 @media (max-width: 768px) {
 
-    /* Header más compacto en móvil */
+    /* Header más compacto */
     header {
         flex-direction: row;
-        /* Volver a fila para ahorrar altura */
         flex-wrap: wrap;
-        /* Permitir que baje si no cabe */
         justify-content: center;
-        /* Centrar todo */
         gap: 0.5rem;
         padding: 0.5rem 1rem;
     }
@@ -544,7 +541,6 @@ button,
         margin-bottom: 0.2rem;
     }
 
-    /* Menú de navegación */
     nav {
         display: flex;
         flex-wrap: wrap;
@@ -563,35 +559,28 @@ button,
         background: rgba(255, 255, 255, 0.5);
     }
 
-    /* Contenedor principal con menos márgenes */
     .container {
         margin: 1rem auto;
         padding: 0 1rem;
     }
 
-    /* Títulos más pequeños */
     h2 {
         font-size: 1.5rem;
     }
 
-    /* Grid de propiedades: 1 sola columna forzada si hace falta, 
-       pero el auto-fill ya suele funcionar. Ajustamos el gap */
     #propiedades-list {
         gap: 1rem;
     }
 
-    /* Cards: Imagen un poco más alta para que luzca en móvil */
     .prop-img-container {
         height: 200px;
     }
 
-    /* Formularios de Login/Registro más compactos */
     .auth-container {
         margin: 2rem auto;
         padding: 1.5rem;
         width: 100%;
         box-shadow: none;
-        /* Más ligero en móvil */
         border: none;
     }
 
@@ -599,12 +588,10 @@ button,
         font-size: 2rem;
     }
 
-    /* Stats del Admin en columna */
     .admin-stats-container {
         grid-template-columns: 1fr;
     }
 
-    /* Banner de bienvenida */
     .user-welcome-banner {
         padding: 2rem 1rem;
     }
@@ -612,4 +599,60 @@ button,
     .user-welcome-banner h2 {
         font-size: 1.5rem;
     }
+
+    /* --- CHAT MÓVIL (TIPO WHATSAPP) --- */
+    /* Por defecto: Mostrar LISTA, Ocultar CHAT */
+    .chat-container {
+        flex-direction: column;
+        height: calc(100dvh - 120px);
+        position: relative;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: 100%;
+        /* Ocupa todo */
+        display: flex;
+        /* Se muestra por defecto */
+        flex-direction: column;
+        border: none;
+    }
+
+    .chat-window {
+        width: 100%;
+        height: 100%;
+        display: none;
+        /* Oculto por defecto */
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: white;
+        z-index: 10;
+        flex-direction: column;
+    }
+
+    /* Clase mágica para cambiar de vista */
+    .chat-container.mobile-view-chat .sidebar {
+        display: none;
+    }
+
+    .chat-container.mobile-view-chat .chat-window {
+        display: flex;
+    }
+
+    /* Botón Atrás (Solo visible en móvil) */
+    .back-button {
+        display: inline-flex !important;
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        margin-right: 0.5rem;
+        cursor: pointer;
+        color: var(--primary);
+    }
+}
+
+/* Ocultar botón atrás en escritorio */
+.back-button {
+    display: none;
 }

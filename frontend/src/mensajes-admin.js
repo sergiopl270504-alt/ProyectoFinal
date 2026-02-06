@@ -78,8 +78,15 @@ window.selectThread = async (id) => {
     noChat.style.display = 'none';
     activeChat.style.display = 'flex';
 
+    // MÓVIL: Cambiar a vista de chat
+    document.querySelector('.chat-container').classList.add('mobile-view-chat');
+
     await loadMessages(id);
     loadThreads();
+};
+
+window.closeChat = () => {
+    document.querySelector('.chat-container').classList.remove('mobile-view-chat');
 };
 
 // Cargar mensajes individuales
