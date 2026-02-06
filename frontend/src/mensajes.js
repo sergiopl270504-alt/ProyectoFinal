@@ -82,19 +82,8 @@ window.selectThread = async (id) => {
     noChat.style.display = 'none';
     activeChat.style.display = 'flex';
 
-    // MÓVIL: Cambiar a vista de chat
-    document.querySelector('.chat-container').classList.add('mobile-view-chat');
-
     await loadMessages(id);
     loadThreads(); // Refrescar lista
-};
-
-/**
- * Función para volver a la lista de chats en móvil.
- */
-window.closeChat = () => {
-    document.querySelector('.chat-container').classList.remove('mobile-view-chat');
-    // Opcional: Limpiar chat activo si quieres
 };
 
 // Cargar mensajes de una conversación
