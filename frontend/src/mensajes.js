@@ -63,11 +63,7 @@ async function loadThreads() {
         `}).join('');
 
     } catch (error) {
-        if (error.message.includes('Token') || error.message.includes('autenticado')) {
-            localStorage.clear();
-            window.location.href = '/login.html';
-            return;
-        }
+    } catch (error) {
         threadList.innerHTML = `<p style="color:red; padding:1rem">Error: ${error.message}</p>`;
     }
 }

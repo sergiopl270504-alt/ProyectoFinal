@@ -60,11 +60,8 @@ async function loadThreads() {
 
     } catch (error) {
         console.error('Error cargando hilos:', error);
-        if (error.message.includes('Token') || error.message.includes('autenticado') || error.status === 403) {
-            localStorage.clear();
-            window.location.href = '/login.html';
-            return;
-        }
+    } catch (error) {
+        console.error('Error cargando hilos:', error);
         threadList.innerHTML = `<p style="color:red; padding:1rem">Error: ${error.message}</p>`;
     }
 }
