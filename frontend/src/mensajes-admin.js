@@ -139,15 +139,17 @@ loadThreads();
 
 // Polling
 setInterval(() => {
-    if (currentInquiryId) loadMessages(currentInquiryId);
+    if (currentInquiryId) loadMessages(currentInquiryId, true);
     loadThreads();
 }, 10000);
 
 // Cargar mensajes de un hilo
-async function loadMessages(id) {
+async function loadMessages(id, backgroundUpdate = false) {
     try {
         console.log('Cargando mensajes para ID:', id);
-        chatMessages.innerHTML = '<div style="text-align:center; padding:1rem">Cargando...</div>';
+        if (!backgroundUpdate) {
+            chatMessages.innerHTML = '<div style="text-align:center; padding:1rem">Cargando...</div>';
+        }
 
         const data = await request(`/mensajes/${id}`);
         console.log('Detalle cargado:', data);
