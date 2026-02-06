@@ -37,7 +37,7 @@ router.put('/:id/reply', checkAuth, responderMensaje);
  * @description Elimina una consulta y sus mensajes.
  * @access Privado
  */
-const { eliminarConsulta } = require('../controllers/controladorMensajes'); // Asegurarse de importar, pero ya está arriba en la línea 3 si la actualizamos... espera, la línea 3 importa todo.
+// La importación ya está arriba. Solo asignamos la ruta.
 router.delete('/:id', checkAuth, eliminarConsulta);
 
 module.exports = router;
