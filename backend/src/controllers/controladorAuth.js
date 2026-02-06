@@ -160,8 +160,20 @@ const controladorAuth = {
     setup2FA: async (req, res) => {
         const userId = req.usuario.id;
         try {
-            const secret = speakeasy.generateSecret({ length: 20 });
+            // 1. Obtener usuario primero para usar su email en el nombre
             const usuario = await Usuario.findByPk(userId);
+
+            if (!usuario) {
+                return res.status(404).json({ msg: 'Usuario no encontrado' });
+            }
+
+            // 2. Generar secreto con nombre personalizado (Casafinder + Email)
+            // Esto hará que en Google Authenticator salga: "Casafinder (usuario@email.com)"
+            const secret = speakeasy.generateSecret({
+                length: 20,
+                name: `Casafinder (${usuario.correo_electronico})`,
+                issuer: 'Casafinder'
+            });
 
             usuario.secret_2fa = secret.base32;
             usuario.tfa_enabled = false; // Aún no activado hasta confirmar
