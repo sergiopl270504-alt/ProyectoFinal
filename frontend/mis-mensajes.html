@@ -192,17 +192,34 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                height: 100dvh;
+                /* Dynamic viewport height fix for mobile browsers */
+            }
+
             .chat-container {
                 flex-direction: column;
-                height: auto;
+                /* Altura fija restando el header aprox */
+                height: calc(100dvh - 120px);
             }
 
             .sidebar {
                 width: 100%;
-                height: 300px;
-                /* collapsible? */
+                height: 110px;
+                /* Lista de chats pequeña arriba */
+                flex-shrink: 0;
                 border-right: none;
                 border-bottom: 1px solid #e5e7eb;
+            }
+
+            .chat-window {
+                flex: 1;
+                min-height: 0;
+                /* Permite scroll interno */
+            }
+
+            .chat-messages {
+                padding: 1rem;
             }
         }
     </style>
