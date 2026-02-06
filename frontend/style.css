@@ -68,7 +68,7 @@ header {
     background: rgba(255, 255, 255, 0.95);
     color: var(--text-main);
     padding: 1rem 2rem;
-    /* Reduced padding */
+    /* Relleno reducido */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -84,7 +84,7 @@ header h1 {
     margin: 0;
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
-    /* Slightly smaller */
+    /* Ligeramente más pequeño */
     font-weight: 700;
     color: var(--primary);
     letter-spacing: -0.02em;
@@ -98,10 +98,10 @@ nav a,
 nav span {
     color: var(--text-main);
     margin-left: 1.5rem;
-    /* Reduced margin */
+    /* Margen reducido */
     text-decoration: none;
     font-size: 0.9rem;
-    /* Slightly smaller */
+    /* Ligeramente más pequeño */
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -117,7 +117,7 @@ nav a:hover {
 
 .container {
     max-width: 1200px;
-    /* Tighter container */
+    /* Contenedor más ajustado */
     margin: 3rem auto;
     padding: 0 2rem;
 }
@@ -126,7 +126,7 @@ h2 {
     font-family: 'Playfair Display', serif;
     color: var(--text-heading);
     font-size: 2rem;
-    /* Reduced from 2.5rem */
+    /* Reducido desde 2.5rem */
     margin-bottom: 2rem;
     font-weight: 600;
     position: relative;
@@ -149,7 +149,7 @@ h2::after {
     display: flex;
     gap: 1rem;
     max-width: 600px;
-    /* Reduced width */
+    /* Ancho reducido */
     background: var(--surface);
     padding: 0.75rem;
     border-radius: var(--radius-md);
@@ -172,7 +172,7 @@ input[type="number"] {
     transition: all 0.3s ease;
 }
 
-/* Fix para el input dentro del container de búsqueda específico del index (si se mantiene inline structure ahi) */
+/* Corrección para el input dentro del container de búsqueda específico del index (si se mantiene estructura en línea ahí) */
 .search-container input {
     border: none;
     background: transparent;
@@ -191,7 +191,7 @@ input:focus {
     box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.1);
 }
 
-/* Buttons - Más sofisticados */
+/* Botones - Más sofisticados */
 button,
 .btn {
     background-color: var(--primary);
@@ -222,26 +222,26 @@ button,
     border-top: 1px solid var(--border-subtle);
     display: flex;
     flex-wrap: wrap;
-    /* Allow wrapping to avoid cutoff */
+    /* Permitir salto de línea para evitar cortes */
     gap: 0.5rem;
     margin-top: auto;
     justify-content: flex-start;
 }
 
-/* Property Grid - RESTORED */
+/* Cuadrícula de Propiedades - RESTAURADA */
 #propiedades-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1.5rem;
-    /* Tighter gap */
+    /* Espacio más ajustado */
 }
 
-/* Cards - Estilo Editorial Compacto */
+/* Tarjetas - Estilo Editorial Compacto */
 .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
-    /* Less rounded */
+    /* Menos redondeado */
     padding: 0;
     overflow: hidden;
     position: relative;
@@ -261,7 +261,7 @@ button,
     position: relative;
     width: 100%;
     height: 160px;
-    /* Compact image height */
+    /* Altura de imagen compacta */
     overflow: hidden;
     z-index: 1;
 }
@@ -277,10 +277,10 @@ button,
     transform: scale(1.05);
 }
 
-/* Sold Badge Style - Simple & Clean */
+/* Estilo Insignia Vendido - Simple y Limpio */
 .sold-badge {
     background: #1e293b;
-    /* Solid Navy */
+    /* Azul marino sólido */
     color: #fff;
     padding: 4px 10px;
     border-radius: 4px;
@@ -297,7 +297,7 @@ button,
     backdrop-filter: none;
 }
 
-/* Card Content - No transparency overlap problems */
+/* Contenido de Tarjeta - Sin problemas de superposición de transparencia */
 .card-content {
     padding: 1.25rem;
     flex-grow: 1;
@@ -334,7 +334,7 @@ button,
     margin-bottom: 0.5rem;
 }
 
-/* Description Clamping */
+/* Recorte de Descripción */
 .card-content>p:not(.price) {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -345,7 +345,7 @@ button,
     margin-bottom: 1rem;
 }
 
-/* Auth Container */
+/* Contenedor de Autenticación */
 .auth-container {
     max-width: 480px;
     margin: 6rem auto;
@@ -420,19 +420,19 @@ button,
 
 /* Nuevas Clases para Elementos Dinámicos (Stats y Banner) */
 
-/* Admin Stats */
+/* Estadísticas de Admin */
 .admin-stats-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1rem;
-    /* Reduced gap */
+    /* Brecha reducida */
     margin-bottom: 3rem;
 }
 
 .stat-card {
     background: var(--surface);
     padding: 1.5rem;
-    /* Reduced padding */
+    /* Relleno reducido */
     border-radius: var(--radius-md);
     text-align: center;
     border: 1px solid var(--border);
@@ -448,7 +448,7 @@ button,
 .stat-value {
     display: block;
     font-size: 2rem;
-    /* Reduced font size */
+    /* Tamaño de fuente reducido */
     font-family: 'Playfair Display', serif;
     font-weight: 700;
     color: var(--primary);
@@ -459,13 +459,13 @@ button,
 .stat-label {
     text-transform: uppercase;
     font-size: 0.75rem;
-    /* Reduced font size */
+    /* Tamaño de fuente reducido */
     letter-spacing: 0.1em;
     font-weight: 600;
     color: var(--text-light);
 }
 
-/* User Welcome Banner */
+/* Banner de Bienvenida de Usuario */
 .user-welcome-banner {
     position: relative;
     background: linear-gradient(rgba(30, 41, 59, 0.7), rgba(30, 41, 59, 0.7)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80');
@@ -473,10 +473,10 @@ button,
     background-position: center 60%;
     color: white;
     padding: 3rem 2rem;
-    /* Reduced padding */
+    /* Relleno reducido */
     border-radius: var(--radius-md);
     margin-bottom: 3rem;
-    /* Reduced margin */
+    /* Margen reducido */
     text-align: center;
     box-shadow: var(--shadow-hover);
     overflow: hidden;
@@ -486,7 +486,7 @@ button,
     color: white;
     margin: 0 0 1rem 0;
     font-size: 2rem;
-    /* Reduced font size */
+    /* Tamaño de fuente reducido */
     text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -498,13 +498,13 @@ button,
 .user-welcome-banner p {
     margin: 0;
     font-size: 1.1rem;
-    /* Reduced font size */
+    /* Tamaño de fuente reducido */
     font-family: 'Lato', sans-serif;
     font-weight: 300;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Animations */
+/* Animaciones */
 .property-card-appear {
     animation: slideUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     opacity: 0;
@@ -600,7 +600,7 @@ button,
         font-size: 1.5rem;
     }
 
-    /* --- CHAT MÓVIL (Horizontal Scroll / Stories Style) --- */
+    /* --- CHAT MÓVIL (Scroll Horizontal / Estilo Historias) --- */
     .chat-container {
         flex-direction: column;
         height: calc(100dvh - 120px);
@@ -705,7 +705,7 @@ button,
         flex: 1 !important;
         width: auto !important;
         height: auto !important;
-        /* Ensure height is auto on desktop */
+        /* Asegurar altura automática en escritorio */
         z-index: auto !important;
     }
 
