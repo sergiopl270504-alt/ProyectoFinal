@@ -171,49 +171,48 @@ const responderMensaje = async (req, res) => {
         console.log(error);
         res.status(500).json({ msg: 'Error al responder mensaje' });
     }
+}
+/**
+ * Elimina una consulta y todos sus mensajes asociados.
+ * 
+ * Permite al usuario (propietario) o al administrador borrar un hilo de conversación completo.
+ * 
+ * @param {Object} req - Objeto de solicitud.
+ * @param {Object} req.params - ID de la consulta a eliminar.
+ * @param {Object} res - Objeto de respuesta.
+ * @returns {Object} JSON confirmando la eliminación.
+ */
+const eliminarConsulta = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const consulta = await Consulta.findByPk(id);
 
-    // Eliminar una consulta (conversación)
-    /**
-     * Elimina una consulta y todos sus mensajes asociados.
-     * 
-     * Permite al usuario (propietario) o al administrador borrar un hilo de conversación completo.
-     * 
-     * @param {Object} req - Objeto de solicitud.
-     * @param {Object} req.params - ID de la consulta a eliminar.
-     * @param {Object} res - Objeto de respuesta.
-     * @returns {Object} JSON confirmando la eliminación.
-     */
-    const eliminarConsulta = async (req, res) => {
-        const { id } = req.params;
-        try {
-            const consulta = await Consulta.findByPk(id);
-
-            if (!consulta) {
-                return res.status(404).json({ msg: 'Conversación no encontrada' });
-            }
-
-            // Verificar permisos: Solo el dueño o admin pueden borrar
-            if (req.usuario.tipo_usuario !== 'admin' && consulta.userId !== req.usuario.id) {
-                return res.status(403).json({ msg: 'No tienes permiso para eliminar esta conversación' });
-            }
-
-            // Eliminar mensajes asociados primero (por si no hay ON DELETE CASCADE)
-            await Mensaje.destroy({ where: { inquiryId: id } });
-
-            // Eliminar la consulta
-            await consulta.destroy();
-
-            res.json({ msg: 'Conversación eliminada correctamente' });
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ msg: 'Error al eliminar conversación' });
+        if (!consulta) {
+            return res.status(404).json({ msg: 'Conversación no encontrada' });
         }
-    }
 
-    module.exports = {
-        crearConsulta,
-        obtenerMensajes,
-        obtenerDetalleMensaje,
-        responderMensaje,
-        eliminarConsulta
-    };
+        // Verificar permisos: Solo el dueño o admin pueden borrar
+        if (req.usuario.tipo_usuario !== 'admin' && consulta.userId !== req.usuario.id) {
+            return res.status(403).json({ msg: 'No tienes permiso para eliminar esta conversación' });
+        }
+
+        // Eliminar mensajes asociados primero (por si no hay ON DELETE CASCADE)
+        await Mensaje.destroy({ where: { inquiryId: id } });
+
+        // Eliminar la consulta
+        await consulta.destroy();
+
+        res.json({ msg: 'Conversación eliminada correctamente' });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: 'Error al eliminar conversación' });
+    }
+}
+
+module.exports = {
+    crearConsulta,
+    obtenerMensajes,
+    obtenerDetalleMensaje,
+    responderMensaje,
+    eliminarConsulta
+};
