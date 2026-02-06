@@ -150,6 +150,30 @@ async function sendMessage() {
     }
 }
 
+/**
+ * Elimina la conversación actual.
+ */
+window.deleteCurrentThread = async () => {
+    if (!currentInquiryId) return;
+
+    if (!confirm('¿Estás seguro de eliminar este hilo de mensajes?')) {
+        return;
+    }
+
+    try {
+        await request(`/mensajes/${currentInquiryId}`, 'DELETE');
+
+        currentInquiryId = null;
+        document.getElementById('active-chat').style.display = 'none';
+        document.getElementById('no-chat').style.display = 'flex';
+        document.querySelector('.chat-container').classList.remove('mobile-view-chat');
+
+        loadThreads();
+    } catch (error) {
+        alert('Error al eliminar: ' + error.message);
+    }
+};
+
 // Carga inicial
 loadThreads();
 

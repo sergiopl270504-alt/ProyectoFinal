@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { crearConsulta, obtenerMensajes, obtenerDetalleMensaje, responderMensaje } = require('../controllers/controladorMensajes');
+const { crearConsulta, obtenerMensajes, obtenerDetalleMensaje, responderMensaje, eliminarConsulta } = require('../controllers/controladorMensajes');
 const checkAuth = require('../middleware/authMiddleware'); // Podríamos renombrar middlewares también luego
 // const checkAdmin = require('../middleware/adminMiddleware'); 
 
@@ -31,5 +31,13 @@ router.get('/:id', checkAuth, obtenerDetalleMensaje);
  * @access Privado
  */
 router.put('/:id/reply', checkAuth, responderMensaje);
+
+/**
+ * @route DELETE /mensajes/:id
+ * @description Elimina una consulta y sus mensajes.
+ * @access Privado
+ */
+const { eliminarConsulta } = require('../controllers/controladorMensajes'); // Asegurarse de importar, pero ya está arriba en la línea 3 si la actualizamos... espera, la línea 3 importa todo.
+router.delete('/:id', checkAuth, eliminarConsulta);
 
 module.exports = router;

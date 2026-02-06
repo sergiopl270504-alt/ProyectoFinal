@@ -244,11 +244,14 @@
             </div>
 
             <div id="active-chat" style="display: none; height: 100%; flex-direction: column;">
-                <div class="chat-header">
+                <div class="chat-header" style="display:flex; justify-content:space-between; align-items:center;">
                     <div>
                         <h3 id="chat-title" style="margin:0;">Propiedad</h3>
                         <small id="chat-subtitle" style="color: #666;">Usuario</small>
                     </div>
+                    <button id="delete-chat-btn" class="btn-danger-icon" title="Eliminar conversación"
+                        style="background:none; border:none; cursor:pointer; font-size:1.2rem;"
+                        onclick="window.deleteCurrentThread()">🗑️</button>
                 </div>
 
                 <div id="chat-messages" class="chat-messages">

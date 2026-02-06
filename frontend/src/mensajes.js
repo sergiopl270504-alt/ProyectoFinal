@@ -159,6 +159,35 @@ async function sendMessage() {
     }
 }
 
+/**
+ * Elimina la conversación actual tras confirmación.
+ */
+window.deleteCurrentThread = async () => {
+    if (!currentInquiryId) return;
+
+    if (!confirm('¿Estás seguro de que quieres eliminar esta conversación? Esta acción no se puede deshacer.')) {
+        return;
+    }
+
+    try {
+        await request(`/mensajes/${currentInquiryId}`, 'DELETE');
+
+        // Limpiar UI
+        currentInquiryId = null;
+        document.getElementById('active-chat').style.display = 'none';
+        document.getElementById('no-chat').style.display = 'flex';
+        document.querySelector('.chat-container').classList.remove('mobile-view-chat'); // Volver a lista en móvil
+
+        // Recargar lista
+        loadThreads();
+
+        alert('Conversación eliminada.');
+    } catch (error) {
+        console.error(error);
+        alert('Error al eliminar: ' + error.message);
+    }
+};
+
 // Carga Inicial
 loadThreads();
 
