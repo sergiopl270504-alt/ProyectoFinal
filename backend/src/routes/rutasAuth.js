@@ -26,7 +26,7 @@ router.post('/registro', [
  */
 router.get('/confirmar/:token', confirmarCuenta);
 
-// Login
+// Iniciar Sesión
 /**
  * @route POST /auth/login
  * @description Inicia sesión y devuelve un token JWT.
@@ -39,7 +39,7 @@ router.post('/olvide-password', olvidePassword);
 router.post('/olvide-password/:token', nuevoPassword);
 router.post('/cambiar-password', checkAuth, cambiarPassword);
 
-// 2FA Setup & Verify
+// Configuración y Verificación 2FA
 router.post('/2fa/setup', checkAuth, setup2FA);
 router.post('/2fa/activate', checkAuth, activate2FA);
 router.post('/2fa/verify', verify2FA);

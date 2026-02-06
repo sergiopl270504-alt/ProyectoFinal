@@ -46,19 +46,19 @@ const generateSalesReport = (properties, res) => {
 
     doc.pipe(res);
 
-    // Header
+    // Cabecera
     doc.fontSize(20).text('Balance de Ventas - Casafinder', { align: 'center' });
     doc.moveDown();
 
     doc.fontSize(12).text(`Fecha de Emisión: ${new Date().toLocaleDateString()}`, { align: 'right' });
     doc.moveDown(2);
 
-    // Calculations
+    // Cálculos
     const soldProperties = properties.filter(p => p.vendido);
     const totalRevenue = soldProperties.reduce((sum, p) => sum + parseFloat(p.precio), 0);
     const activeProperties = properties.length - soldProperties.length;
 
-    // Summary Box
+    // Cuadro de Resumen
     doc.fontSize(14).text('Resumen Financiero', { underline: true });
     doc.fontSize(12);
     doc.text(`Total Propiedades Vendidas: ${soldProperties.length}`);
@@ -66,7 +66,7 @@ const generateSalesReport = (properties, res) => {
     doc.text(`Propiedades Activas: ${activeProperties}`);
     doc.moveDown(2);
 
-    // Detail List
+    // Lista de Detalles
     doc.fontSize(14).text('Detalle de Ventas Cerradas', { underline: true });
     doc.moveDown();
 

@@ -110,7 +110,7 @@ const crearPropiedad = async (req, res) => {
             ];
             urlImagen = backups[Math.floor(Math.random() * backups.length)];
         } else if (urlImagen && urlImagen.includes('w=500')) {
-            // Fix para imágenes cacheadas pequeñas
+            // Corrección para imágenes cacheadas pequeñas
             urlImagen = 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80';
         }
 
