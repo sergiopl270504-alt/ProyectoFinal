@@ -35,27 +35,20 @@ const controladorAuth = {
                 return res.status(400).json({ msg: 'El usuario ya existe' });
             }
 
-            // Crear Usuario (sin confirmar)
-            const tokenConfirmacion = Math.floor(100000 + Math.random() * 900000).toString(); // Token simple 6 dígitos
-
+            // Crear Usuario (Confirmado automáticamente)
             usuario = await Usuario.create({
                 nombre_completo,
                 movil,
                 correo_electronico,
                 contrasena,
-                token_confirmacion: tokenConfirmacion,
-                verificado: false
+                token_confirmacion: null,
+                verificado: true
             });
 
-            // Enviar Email
-            // Enviar Email
-            await emailRegistro({
-                email: correo_electronico,
-                nombre: nombre_completo,
-                token: tokenConfirmacion
-            });
+            // Email de Bienvenida (Opcional, o simplemente no enviar nada)
+            // Ya no enviamos emailRegistro() para confirmación.
 
-            res.status(201).json({ msg: 'Usuario creado. Revisa tu correo para confirmar cuenta.', tokenSimulado: tokenConfirmacion });
+            res.status(201).json({ msg: 'Usuario creado correctamente. Ya puedes iniciar sesión.' });
 
         } catch (error) {
             console.error(error);
