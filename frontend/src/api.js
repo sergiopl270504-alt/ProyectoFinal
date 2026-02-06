@@ -1,5 +1,8 @@
 // URL base donde corre nuestro servidor de backend
-const API_URL = 'http://localhost:3000';
+// URL base: Si es localhost (desarrollo), usa el puerto 3000. Si es producción (AWS/IP), usa ruta relativa.
+const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:3000'
+    : '';
 
 /**
  * Función genérica para realizar peticiones HTTP a la API.
