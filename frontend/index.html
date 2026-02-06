@@ -183,24 +183,9 @@
 
     async function downloadPropertyPDF(id) {
       try {
-        const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json'
-        };
-        if (token) headers['Authorization'] = `Bearer ${token}`;
+        // Usar el wrapper request que maneja la URL base correcta (producción vs localhost) y el token
+        const blob = await request(`/propiedades/${id}/pdf`, 'GET', null, true);
 
-        // Inline Fetch to avoid caching issues with api.js
-        const response = await fetch(`http://localhost:3000/propiedades/${id}/pdf`, {
-          method: 'GET',
-          headers
-        });
-
-        if (!response.ok) {
-          const errText = await response.text();
-          throw new Error(errText || 'Error descargando archivo');
-        }
-
-        const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -210,30 +195,16 @@
         window.URL.revokeObjectURL(url);
         a.remove();
       } catch (error) {
-        alert('Error descargando PDF (Inline): ' + error.message);
+        alert('Error descargando PDF: ' + error.message);
       }
     }
 
     // ADDED: Global Report Download Function
     window.downloadReport = async function () {
       try {
-        const token = localStorage.getItem('token');
-        const headers = {
-          'Content-Type': 'application/json'
-        };
-        if (token) headers['Authorization'] = `Bearer ${token}`;
+        // Usar el wrapper request para manejar la URL correcta
+        const blob = await request('/propiedades/reporte', 'GET', null, true);
 
-        const response = await fetch(`http://localhost:3000/propiedades/reporte`, {
-          method: 'GET',
-          headers
-        });
-
-        if (!response.ok) {
-          const errText = await response.text();
-          throw new Error(errText || 'Error descargando informe');
-        }
-
-        const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
