@@ -609,7 +609,8 @@ button,
 
     .sidebar {
         width: 100%;
-        height: 220px;
+        height: 160px;
+        /* Reducido de 220px */
         /* MÁS GRANDE para que se vea bien la lista */
         flex-shrink: 0;
         border-right: none;
@@ -637,6 +638,12 @@ button,
     /* Ocultar elementos de la lógica "WhatsApp" anterior */
     .back-button {
         display: none !important;
+    }
+
+    /* Levantar el input para evitar toques accidentales en bordes inferiores */
+    .chat-input-area {
+        padding-bottom: 30px;
+        /* Espacio extra abajo */
     }
 }
 
