@@ -82,61 +82,23 @@ window.selectThread = async (id) => {
     noChat.style.display = 'none';
     activeChat.style.display = 'flex';
 
+    // MODO MÓVIL: Switch a vista de chat
+    document.querySelector('.chat-container').classList.add('mobile-chat-active');
+
     await loadMessages(id);
     loadThreads(); // Refrescar lista
 };
 
-// Cargar mensajes de una conversación
-/**
- * Carga y muestra los mensajes de una conversación específica.
- * 
- * Renderiza los mensajes en burbujas de chat, diferenciando entre los propios
- * y los del interlocutor.
- * 
- * @param {string} id - ID de la consulta a visualizar.
- */
-async function loadMessages(id) {
-    try {
-        const inquiry = await request(`/mensajes/${id}`); // Endpoint actualizado
-
-        chatTitle.innerText = inquiry.propiedad ? inquiry.propiedad.titulo : 'Conversación';
-
-        // Renderizar Mensajes
-        chatMessages.innerHTML = inquiry.mensajes.map(msg => {
-            const isMine = (user.role === 'usuario' && msg.remitente === 'usuario') ||
-                (user.role === 'admin' && msg.remitente === 'admin');
-
-            return `
-            <div class="message-bubble ${isMine ? 'mine' : 'theirs'}">
-                ${msg.contenido}
-                <span class="message-time">${new Date(msg.fecha_envio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            </div>
-        `}).join('');
-
-        // Scroll al final
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    } catch (error) {
-        console.error(error);
-        alert('Error cargando mensajes');
-    }
+// Navegación Móvil: Volver a lista
+const backBtn = document.querySelector('.back-button');
+if (backBtn) {
+    backBtn.addEventListener('click', () => {
+        document.querySelector('.chat-container').classList.remove('mobile-chat-active');
+        // Opcional: limpiar selección
+        // currentInquiryId = null; 
+    });
 }
-
-sendBtn.addEventListener('click', sendMessage);
-messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-// UX Móvil: Ocultar lista al escribir
-messageInput.addEventListener('focus', () => {
-    document.querySelector('.chat-container').classList.add('input-focused');
-});
-messageInput.addEventListener('blur', () => {
-    // Pequeño delay para no cortar clics rápidos
-    setTimeout(() => {
-        document.querySelector('.chat-container').classList.remove('input-focused');
-    }, 200);
-});
+// NOTA: Se ha eliminado la lógica de ocultar sidebar con focus porque ya no es necesaria con la pantalla completa.
 
 // Enviar nuevo mensaje
 /**

@@ -78,57 +78,22 @@ window.selectThread = async (id) => {
     noChat.style.display = 'none';
     activeChat.style.display = 'flex';
 
+    // MODO MÓVIL: Switch a vista de chat
+    document.querySelector('.chat-container').classList.add('mobile-chat-active');
+
     await loadMessages(id);
     loadThreads();
 };
 
-// Cargar mensajes individuales
-/**
- * Carga el historial de mensajes de la consulta seleccionada.
- * 
- * Muestra información extendida del usuario (nombre, email) en la cabecera del chat.
- * 
- * @param {string} id - ID de la consulta.
- */
-async function loadMessages(id) {
-    try {
-        const inquiry = await request(`/mensajes/${id}`); // Endpoint actualizado
-
-        chatTitle.innerText = inquiry.propiedad ? inquiry.propiedad.titulo : 'Propiedad eliminada';
-        chatSubtitle.innerText = inquiry.usuario ? `${inquiry.usuario.nombre_completo} (${inquiry.usuario.correo_electronico})` : 'Usuario desconocido';
-
-        chatMessages.innerHTML = inquiry.mensajes.map(msg => {
-            const isAdmin = msg.remitente === 'admin';
-
-            return `
-            <div class="message-bubble ${isAdmin ? 'mine' : 'theirs'}">
-                ${msg.contenido}
-                <span class="message-time">${new Date(msg.fecha_envio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-            </div>
-        `}).join('');
-
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-    } catch (error) {
-        console.error(error);
-        alert('Error cargando mensajes del chat');
-    }
+// Navegación Móvil: Volver a lista
+const backBtn = document.querySelector('.back-button');
+if (backBtn) {
+    backBtn.addEventListener('click', () => {
+        document.querySelector('.chat-container').classList.remove('mobile-chat-active');
+    });
 }
+// NOTA: Eliminada lógica antigua de focus
 
-sendBtn.addEventListener('click', sendMessage);
-messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage();
-});
-
-// UX Móvil: Ocultar lista al escribir
-messageInput.addEventListener('focus', () => {
-    document.querySelector('.chat-container').classList.add('input-focused');
-});
-messageInput.addEventListener('blur', () => {
-    setTimeout(() => {
-        document.querySelector('.chat-container').classList.remove('input-focused');
-    }, 200);
-});
 
 // Enviar respuesta
 /**
