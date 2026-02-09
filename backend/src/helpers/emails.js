@@ -14,7 +14,8 @@ const emailRegistro = async (datos) => {
     // Si no hay credenciales, simular envío
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.log(`[SIMULACIÓN EMAIL] Registro para ${email}`);
-        console.log(`Link: http://13.60.189.119:3000/confirmar-cuenta.html?token=${token}`);
+        const domain = process.env.BACKEND_URL || 'http://13.60.189.119:3000';
+        console.log(`Link: ${domain}/confirmar-cuenta.html?token=${token}`);
         return;
     }
 
@@ -42,7 +43,8 @@ const emailRegistro = async (datos) => {
         });
     } catch (error) {
         console.error('[ERROR EMAIL] Fallo al enviar correo real, mostrando en log para desarrollo:');
-        console.log(`Link: http://13.60.189.119:3000/confirmar-cuenta.html?token=${token}`);
+        const domain = process.env.BACKEND_URL || 'http://13.60.189.119:3000';
+        console.log(`Link: ${domain}/confirmar-cuenta.html?token=${token}`);
     }
 }
 
@@ -61,7 +63,8 @@ const emailOlvidePassword = async (datos) => {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.log(`[SIMULACIÓN EMAIL] Password Reset para ${email}`);
         console.log(`\n*** CÓDIGO DE RECUPERACIÓN: ${token} ***\n`);
-        console.log(`(O usa este link: http://13.60.189.119:3000/nueva-contrasena.html?token=${token})`);
+        const domain = process.env.BACKEND_URL || 'http://13.60.189.119:3000';
+        console.log(`(O usa este link: ${domain}/nueva-contrasena.html?token=${token})`);
         return;
     }
 
@@ -90,7 +93,8 @@ const emailOlvidePassword = async (datos) => {
         });
     } catch (error) {
         console.error('[ERROR EMAIL] Fallo al enviar correo real, mostrando en log para desarrollo:');
-        console.log(`Link: http://13.60.189.119:3000/nueva-contrasena.html?token=${token}`);
+        const domain = process.env.BACKEND_URL || 'http://13.60.189.119:3000';
+        console.log(`Link: ${domain}/nueva-contrasena.html?token=${token}`);
     }
 }
 
