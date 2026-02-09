@@ -35,6 +35,11 @@ services:
       - "3000:3000"
     environment:
       - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=root
+      - DB_NAME=casafinder_db
+      - JWT_SECRET=supersecretkeycasafinder
+      - PORT=3000
     depends_on:
       db:
         condition: service_healthy
