@@ -40,6 +40,7 @@ services:
       - DB_NAME=casafinder_db
       - JWT_SECRET=supersecretkeycasafinder
       - PORT=3000
+      - BACKEND_URL=http://13.60.189.119:3000
     depends_on:
       db:
         condition: service_healthy

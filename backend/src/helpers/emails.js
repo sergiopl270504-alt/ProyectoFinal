@@ -14,7 +14,7 @@ const emailRegistro = async (datos) => {
     // Si no hay credenciales, simular envío
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.log(`[SIMULACIÓN EMAIL] Registro para ${email}`);
-        console.log(`Link: http://localhost:3000/confirmar-cuenta.html?token=${token}`);
+        console.log(`Link: http://13.60.189.119:3000/confirmar-cuenta.html?token=${token}`);
         return;
     }
 
@@ -36,13 +36,13 @@ const emailRegistro = async (datos) => {
             html: `
                 <p>Hola ${nombre}, comprueba tu cuenta en Casafinder.com</p>
                 <p>Tu cuenta ya esta lista, solo debes confirmarla en el siguiente enlace:
-                <a href="${process.env.BACKEND_URL || 'http://localhost:3000'}/auth/confirmar/${token}">Confirmar Cuenta</a> </p>
+                <a href="${process.env.BACKEND_URL || 'http://13.60.189.119:3000'}/auth/confirmar/${token}">Confirmar Cuenta</a> </p>
                 <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>
             `
         });
     } catch (error) {
         console.error('[ERROR EMAIL] Fallo al enviar correo real, mostrando en log para desarrollo:');
-        console.log(`Link: http://localhost:3000/confirmar-cuenta.html?token=${token}`);
+        console.log(`Link: http://13.60.189.119:3000/confirmar-cuenta.html?token=${token}`);
     }
 }
 
@@ -61,7 +61,7 @@ const emailOlvidePassword = async (datos) => {
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
         console.log(`[SIMULACIÓN EMAIL] Password Reset para ${email}`);
         console.log(`\n*** CÓDIGO DE RECUPERACIÓN: ${token} ***\n`);
-        console.log(`(O usa este link: http://localhost:3000/nueva-contrasena.html?token=${token})`);
+        console.log(`(O usa este link: http://13.60.189.119:3000/nueva-contrasena.html?token=${token})`);
         return;
     }
 
@@ -84,13 +84,13 @@ const emailOlvidePassword = async (datos) => {
                 <p>Hola ${nombre}, has solicitado reestablecer tu password en Casafinder.com</p>
                 <p>Tu código de recuperación es: <strong>${token}</strong></p>
                 <p>O sigue el siguiente enlace:
-                <a href="${process.env.BACKEND_URL || 'http://localhost:3000'}/nueva-contrasena.html?token=${token}">Reestablecer Password</a> </p>
+                <a href="${process.env.BACKEND_URL || 'http://13.60.189.119:3000'}/nueva-contrasena.html?token=${token}">Reestablecer Password</a> </p>
                 <p>Si tu no solicitaste esto, puedes ignorar el mensaje</p>
             `
         });
     } catch (error) {
         console.error('[ERROR EMAIL] Fallo al enviar correo real, mostrando en log para desarrollo:');
-        console.log(`Link: http://localhost:3000/nueva-contrasena.html?token=${token}`);
+        console.log(`Link: http://13.60.189.119:3000/nueva-contrasena.html?token=${token}`);
     }
 }
 
