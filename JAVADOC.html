@@ -252,7 +252,7 @@
     <nav class="sidebar">
         <div class="sidebar-header">
             <a href="#" class="brand">Casafinder API</a>
-            <span class="version">v2.2.0 (Producción)</span>
+            <span class="version">v2.3.0 (Producción)</span>
         </div>
 
         <div class="nav-scroll">
@@ -269,13 +269,22 @@
                 <a href="#auth-login" class="nav-item">Login / Login 2FA</a>
                 <a href="#auth-setup2fa" class="nav-item">Configurar 2FA</a>
                 <a href="#auth-verify2fa" class="nav-item">Verificar 2FA</a>
+                <a href="#auth-activar2fa" class="nav-item">Activar 2FA</a>
+                <a href="#auth-status2fa" class="nav-item">Estado 2FA</a>
+                <a href="#auth-disable2fa" class="nav-item">Desactivar 2FA</a>
+                <a href="#auth-cambiarpass" class="nav-item">Cambiar Password</a>
+                <a href="#auth-eliminar" class="nav-item">Eliminar Cuenta</a>
             </div>
 
             <div class="nav-group">
                 <div class="nav-group-title">Propiedades</div>
                 <a href="#prop-crear" class="nav-item">Crear Propiedad</a>
                 <a href="#prop-listar" class="nav-item">Listar / Buscar</a>
-                <a href="#prop-pdf" class="nav-item">Descargar PDF</a>
+                <a href="#prop-detalle" class="nav-item">Detalle Propiedad</a>
+                <a href="#prop-editar" class="nav-item">Editar Propiedad</a>
+                <a href="#prop-eliminar" class="nav-item">Eliminar Propiedad</a>
+                <a href="#prop-pdf" class="nav-item">Ficha PDF</a>
+                <a href="#prop-reporte" class="nav-item">Reporte Ventas</a>
             </div>
 
             <div class="nav-group">
@@ -287,6 +296,7 @@
             <div class="nav-group">
                 <div class="nav-group-title">Herramientas</div>
                 <a href="#helper-email" class="nav-item">Email Helpers</a>
+                <a href="#helper-pdf" class="nav-item">PDF Gen Helpers</a>
                 <a href="#middleware" class="nav-item">Middleware</a>
             </div>
         </div>
@@ -459,6 +469,42 @@
                     <p><strong>Lógica:</strong> Usa <code>speakeasy.totp.verify()</code> con ventana de tiempo de 1 (30s
                         margen).</p>
                 </div>
+
+                <div id="auth-activar2fa" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge post">POST</span> activate2FA(req, res)
+                    </div>
+                    <p>Confirma el secreto 2FA y activa la protección en la cuenta.</p>
+                    <p><strong>Requisito:</strong> Usuario debe estar autenticado.</p>
+                </div>
+
+                <div id="auth-status2fa" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">GET</span> status2FA(req, res)
+                    </div>
+                    <p>Obtiene el estado actual (activado/desactivado) del Segundo Factor.</p>
+                </div>
+
+                <div id="auth-disable2fa" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge post">POST</span> disable2FA(req, res)
+                    </div>
+                    <p>Desactiva permanentemente el 2FA y limpia el secreto TOTP de la base de datos.</p>
+                </div>
+
+                <div id="auth-cambiarpass" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge put">PUT</span> cambiarPassword(req, res)
+                    </div>
+                    <p>Permite al usuario cambiar su contraseña actual por una nueva tras validación.</p>
+                </div>
+
+                <div id="auth-eliminar" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge delete">DELETE</span> eliminarCuenta(req, res)
+                    </div>
+                    <p>Elimina permanentemente el perfil. Impide borrar el último administrador del sistema.</p>
+                </div>
             </section>
 
             <!-- SECCIÓN PROPIEDADES -->
@@ -500,6 +546,34 @@
                         <li><strong>Output:</strong> Stream Buffer directo al navegador.</li>
                     </ul>
                 </div>
+
+                <div id="prop-detalle" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">GET</span> obtenerPropiedad(req, res)
+                    </div>
+                    <p>Obtiene información exhaustiva de un inmueble, incluyendo datos del anunciante.</p>
+                </div>
+
+                <div id="prop-editar" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge put">PUT</span> editarPropiedad(req, res)
+                    </div>
+                    <p>Actualiza los campos de una propiedad. Requiere ser el dueño o administrador.</p>
+                </div>
+
+                <div id="prop-eliminar" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge delete">DELETE</span> eliminarPropiedad(req, res)
+                    </div>
+                    <p>Elimina el activo inmobiliario y sus registros asociados de la base de datos.</p>
+                </div>
+
+                <div id="prop-reporte" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge get">GET</span> reporte(req, res)
+                    </div>
+                    <p>Genera un informe administrativo global de todas las propiedades en formato PDF.</p>
+                </div>
             </section>
 
             <!-- SECCIÓN UTILS -->
@@ -528,6 +602,17 @@
                         <li><code>emailRegistro</code>: Envía token de verificación.</li>
                         <li><code>emailOlvidePassword</code>: Envía enlace de reset.</li>
                         <li><strong>Modo DEV:</strong> Si no hay credenciales SMTP, imprime el link en consola.</li>
+                    </ul>
+                </div>
+
+                <div id="helper-pdf" class="api-card anchor">
+                    <div class="method-signature">
+                        <span class="badge middleware">HELPER</span> pdfgenerator.js
+                    </div>
+                    <p>Motores de renderizado binario.</p>
+                    <ul>
+                        <li><code>generatePropertyPDF</code>: Renderiza la ficha comercial de un activo.</li>
+                        <li><code>generateSalesReport</code>: Calcula balances y renderiza el reporte financiero.</li>
                     </ul>
                 </div>
             </section>
